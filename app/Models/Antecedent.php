@@ -11,8 +11,8 @@ class Antecedent extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type_antecedent',
-        'description_antecedent',
+        'type',
+        'description',
         'resource_id',
     ];
 

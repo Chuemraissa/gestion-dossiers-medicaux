@@ -31,9 +31,9 @@
                         <label class="form-label" for="patient">Patient</label>
                         <select class="form-control" id="patient" name="patient">
                             @foreach($resources as $resource)
-                                @if($resource->id == $params->patient_id)
+                                @if($resource->id == $params->resource_id)
                                     <option value="{{ $resource->id }}" selected>{{ $resource->nom_prenom }}</option>
-                                @elseif ($resource->role == 'patient')
+                                @else
                                     <option value="{{ $resource->id }}">{{ $resource->nom_prenom }}</option>
                                 @endif
                             @endforeach

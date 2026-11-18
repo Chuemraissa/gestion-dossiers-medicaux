@@ -6,59 +6,35 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Carbon\Carbon;
 
+/**
+ * Rappel envoyé au médecin quelques heures avant le rendez-vous.
+ * Elle passe par la file d'attente (php artisan queue:work).
+ */
 class AppointmentCreatedMedecin extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        // Pas besoin de délai ici, il sera appliqué lors de l'envoi
+    public function __construct(
+        public string $patient,
+        public string $medecin,
+        public string $date,
+        public string $heure,
+        public string $statut,
+    ) {
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
-
         return (new MailMessage)
             ->subject('Rappel du rendez-vous')
-            ->greeting('Bonjour '. $this->medecin . '.')
-            ->line('Votre rendez-vous avec le patient'. $this->patient . '  est'. $this->statut . ' pour le'. $this->date . '  à '. $this->heure . '.')
-            ->line('Merci de ne pas l\'oublier!');
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable"
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+            ->greeting('Bonjour '.$this->medecin.',')
+            ->line('Votre rendez-vous avec le patient '.$this->patient.' ('.$this->statut.') est prévu le '.$this->date.' à '.$this->heure.'.')
+            ->line('Merci de ne pas l\'oublier !');
     }
 }

@@ -22,8 +22,13 @@ class Rendez_vous extends Model
         'medecin_id',
     ];
     
-    public function resource()
+    public function patient()
     {
-        return $this->belongsTo(Resource::class);
+        return $this->belongsTo(Resource::class, 'patient_id');
+    }
+
+    public function medecin()
+    {
+        return $this->belongsTo(Resource::class, 'medecin_id');
     }
 }

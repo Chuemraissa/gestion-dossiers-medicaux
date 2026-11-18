@@ -8,11 +8,11 @@
 <div class="container-fluid py-5">
 
   <ul class="nav nav-tabs" role="tablist">
-    @if(session('role') == 'admin' || session('role') == 'laborantin' || session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere') 
+    @if(auth()->user()?->aAcces('examens')) 
     <li class="nav-item"><a class="nav-link {{ request()->is('listestraitements') ? 'active': null }}" href="{{ url('listestraitements') }}" role="tab">Traitements</a></li>
     @endif
     <li class="nav-item"><a class="nav-link {{ request()->is('listemedicaments') ? 'active': null }}" href="{{ url('listemedicaments') }}" role="tab">Medicaments</a></li>
-    @if(session('role') == 'admin' || session('role') == 'laborantin' || session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere') 
+    @if(auth()->user()?->aAcces('medicaments')) 
     <li class="nav-item"><a class="nav-link {{ request()->is('listecategories') ? 'active': null }}" href="{{ url('listecategories') }}" role="tab">Categories</a></li>
     <li class="nav-item"><a class="nav-link {{ request()->is('listeposologies') ? 'active': null }}" href="{{ url('listeposologies') }}" role="tab">posologie</a></li>
     @endif
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="col-2 col-md-2 justify-content-end">
-          @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'laborantin') 
+          @if(auth()->user()?->aAcces('examens_gestion')) 
           <button type="button" data-toggle="modal" data-target="#myModal3" class="bg-primary bordure">
             <i class="fas fa-user-plus mr-2"></i>Ajouter un traitement
           </button>
@@ -94,13 +94,13 @@
           <thead class="bg-primary text-white sticky-top">
             <tr>
               <th scope="col">NomPatient</th>
-              @if(session('role') == 'admin' || session('role') == 'medecin')
+              @if(auth()->user()?->aAcces('voir_laborantin'))
               <th scope="col">NomLaborantin</th>
               @endif
               <th scope="col">TypeExamen</th>
               <th scope="col">Resultat</th>
               <th scope="col">Date</th>
-              @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'laborantin') 
+              @if(auth()->user()?->aAcces('examens_gestion')) 
               <th scope="col">Action</th>
               @endif
             </tr>
@@ -115,7 +115,7 @@
                   @endif
                 @endforeach
               </td>
-              @if(session('role') == 'admin' || session('role') == 'medecin')
+              @if(auth()->user()?->aAcces('voir_laborantin'))
               <td>
                 @foreach($laborantins as $laborantin)
                   @if($effectuer->laborantin_id == $laborantin->id)
@@ -133,7 +133,7 @@
               </td>
               <td>{{ $effectuer->resultat }}</td>
               <td>{{ $effectuer->created_at }}</td>
-              @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'laborantin') 
+              @if(auth()->user()?->aAcces('examens_gestion')) 
               <td>
                 <a href="/update-traitement/{{ $effectuer->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>
                 <a href="/delete-traitement/{{ $effectuer->id }}" class="btn btn-danger btn-sm" style="line-height: 1;"><i class="fas fa-trash"></i></a>
@@ -161,7 +161,7 @@
             </div>
         </div>
         <div class="col-2 col-md-2 justify-content-end">
-          @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere' || session('role') == 'pharmacien') 
+          @if(auth()->user()?->aAcces('medicaments_gestion')) 
           <button type="button" data-toggle="modal" data-target="#myModal4" class="bg-primary bordure">
             <i class="fas fa-user-plus mr-2"></i>Ajouter un medicament
           </button>
@@ -222,7 +222,7 @@
               <th scope="col">Nom</th>
               <th scope="col">Quantité</th>
               <th scope="col">Cout</th>
-              @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere' || session('role') == 'pharmacien') 
+              @if(auth()->user()?->aAcces('medicaments_gestion')) 
               <th scope="col">Action</th>
               @endif
             </tr>
@@ -234,7 +234,7 @@
               <td>{{ $medicament->nom }}</td>
               <td>{{ $medicament->quantite }}</td>
               <td>{{ $medicament->cout }}</td>
-              @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'pharmacien' || session('role') == 'infirmiere') 
+              @if(auth()->user()?->aAcces('medicaments_gestion')) 
               <td>
                 <a href="/update-medicaments/{{ $medicament->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>
                 <a href="/delete-medicaments/{{ $medicament->id }}" class="btn btn-danger btn-sm" style="line-height: 1;"><i class="fas fa-trash"></i></a>
@@ -262,7 +262,7 @@
             </div>
         </div>
         <div class="col-2 col-md-2 justify-content-end">
-          @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere') 
+          @if(auth()->user()?->aAcces('categories_gestion')) 
           <button type="button" data-toggle="modal" data-target="#myModal5" class="bg-primary bordure">
             <i class="fas fa-user-plus mr-2"></i>Ajouter une categorie
           </button>
@@ -303,7 +303,7 @@
           <thead class="bg-primary text-white sticky-top">
             <tr>
               <th scope="col">Nom</th>
-              @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere') 
+              @if(auth()->user()?->aAcces('categories_gestion')) 
               <th scope="col">Action</th>
               @endif
             </tr>
@@ -312,7 +312,7 @@
             @foreach($categories as $categorie)
             <tr class="table-row">
               <td>{{ $categorie->nom }}</td>
-              @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere') 
+              @if(auth()->user()?->aAcces('categories_gestion')) 
               <td>
                 <a href="/update-categories/{{ $categorie->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>
                 <a href="/delete-categories/{{ $categorie->id }}" class="btn btn-danger btn-sm" style="line-height: 1;"><i class="fas fa-trash"></i></a>
@@ -347,7 +347,7 @@
               <th scope="col">Dose</th>
               <th scope="col">Frequence</th>
               <th scope="col">Duree</th>
-              @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere') 
+              @if(auth()->user()?->aAcces('categories_gestion')) 
               <th scope="col">Action</th>
               @endif
             </tr>
@@ -358,7 +358,7 @@
               <td>{{ $posologie->dose }}</td>
               <td>{{ $posologie->frequence }}</td>
               <td>{{ $posologie->duree }}</td>
-              @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere') 
+              @if(auth()->user()?->aAcces('categories_gestion')) 
               <td>
                 <a href="/delete-posologies/{{ $posologie->id }}" class="btn btn-danger btn-sm" style="line-height: 1;"><i class="fas fa-trash"></i></a>
               </td>

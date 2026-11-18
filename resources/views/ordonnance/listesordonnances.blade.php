@@ -10,7 +10,7 @@
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item"><a class="nav-link {{ request()->is('listesordonnances') ? 'active': null }}" href="{{ url('listesordonnances') }}" role="tab">Ordonnances</a></li>
     <li class="nav-item"><a class="nav-link {{ request()->is('listesexamens') ? 'active': null }}" href="{{ url('listesexamens') }}" role="tab">Examens</a></li>
-    @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere') 
+    @if(auth()->user()?->aAcces('rendez_vous')) 
     <li class="nav-item"><a class="nav-link {{ request()->is('listesRDV') ? 'active': null }}" href="{{ url('listesRDV') }}" role="tab">Rendez-vous</a></li>
     @endif
     </ul>
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="col-2 col-md-4">
-          @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere') 
+          @if(auth()->user()?->aAcces('prescription')) 
             <button type="button" data-toggle="modal" data-target="#myModal" class="bg-primary bordure">
                 <i class="fas fa-user-plus mr-2"></i>Ajouter une ordonnances
             </button>
@@ -118,14 +118,14 @@
             <thead class="bg-primary text-white sticky-top">
               <tr>
                 <th scope="col">NomPatient</th>
-                @if(session('role') == 'admin')
+                @if(auth()->user()?->aAcces('voir_medecin'))
                 <th scope="col">NomMedecin</th>
                 @endif
                 <th scope="col">Examen</th>
                 <th scope="col">NomMedicament</th>
                 <th scope="col">IdPosologie</th>
                 <th scope="col">Description</th>
-                @if(session('role') == 'admin' || session('role') == 'medecin') 
+                @if(auth()->user()?->aAcces('prescription')) 
                 <th scope="col">Action</th>
                 @endif
                 </tr>
@@ -140,7 +140,7 @@
                       @endif
                     @endforeach
                   </td>
-                  @if(session('role') == 'admin')
+                  @if(auth()->user()?->aAcces('voir_medecin'))
                   <td>
                     @foreach($medecins as $medecin)
                       @if($ordonnancesAl->medecin_id == $medecin->id)
@@ -153,9 +153,9 @@
                   <td>{{ $ordonnancesAl->medicament_id == NULL?'En_attente':$ordonnancesAl->medicament->nom }}</td>
                   <td>{{ $ordonnancesAl->posologie_id }}</td>
                   <td>{{ $ordonnancesAl->description }}</td>
-                  @if(session('role') == 'admin' || session('role') == 'medecin') 
+                  @if(auth()->user()?->aAcces('prescription')) 
                   <td>
-                      @if(session('role') == 'admin' || session('role') == 'laborantin' || session('role') == 'infirmiere' || session('role') == 'medecin') 
+                      @if(auth()->user()?->aAcces('ordonnances')) 
                       <a href="/imprimer/{{ $ordonnancesAl->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-print"></i></a>
                         <a href="/update-ordonnances/{{ $ordonnancesAl->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>
                         <a href="/delete-ordonnances/{{ $ordonnancesAl->id }}" class="btn btn-danger btn-sm" style="line-height: 1;"><i class="fas fa-trash"></i></a>
@@ -184,7 +184,7 @@
                 </button>
             </div>
         </div>
-        @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'laborantin') 
+        @if(auth()->user()?->aAcces('examens_gestion')) 
         <div class="col-2 col-md-2 justify-content-end">
           <button type="button" data-toggle="modal" data-target="#myModal1" class="bg-primary bordure">
             <i class="fas fa-user-plus mr-2"></i>Ajouter un examen
@@ -244,7 +244,7 @@
               <th scope="col">Type</th>
               <th scope="col">Description</th>
               <th scope="col">Cout</th>
-              @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'laborantin') 
+              @if(auth()->user()?->aAcces('examens_gestion')) 
               <th scope="col">Action</th>
               @endif
             </tr>
@@ -255,7 +255,7 @@
               <td>{{ $examen->type }}</td>
               <td>{{ $examen->description }}</td>
               <td>{{ $examen->cout }}</td>
-              @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'laborantin') 
+              @if(auth()->user()?->aAcces('examens_gestion')) 
               <td>
                 <a href="/update-examens/{{ $examen->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>
                 <a href="/delete-examens/{{ $examen->id }}" class="btn btn-danger btn-sm" style="line-height: 1;"><i class="fas fa-trash"></i></a>
@@ -360,7 +360,7 @@
             <thead class="bg-primary text-white sticky-top">
               <tr>
                 <th scope="col">NomPatient</th>
-                @if(session('role') == 'admin')
+                @if(auth()->user()?->aAcces('voir_medecin'))
                 <th scope="col">NomMedecin</th>
                 @endif
                 <th scope="col">Date</th>
@@ -380,7 +380,7 @@
                       @endif
                     @endforeach
                   </td>
-                  @if(session('role') == 'admin')
+                  @if(auth()->user()?->aAcces('voir_medecin'))
                   <td>
                     @foreach($medecins as $medecin)
                       @if($rdv->medecin_id == $medecin->id)
@@ -395,7 +395,7 @@
                 <td>{{ $rdv->motif }}</td>
                 <td>
                   <a href="/update-RDV/{{ $rdv->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>
-                  @if(session('role') == 'admin' || session('role') == 'medecin') 
+                  @if(auth()->user()?->aAcces('rendez_vous_suppression')) 
                   <a href="/delete-RDV/{{ $rdv->id }}" class="btn btn-danger btn-sm" style="line-height: 1;"><i class="fas fa-trash"></i></a>
                   @endif
                 </td>

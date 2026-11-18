@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use App\Models\Ordonnance;
 use App\Models\Medicament;
 use App\Models\Posologie;
@@ -12,187 +14,172 @@ use App\Models\Examen;
 use App\Mail\NewOrdonnanceMail;
 use App\Mail\AttenteNewOrdonnanceMail;
 use App\Mail\UpdateOrdonnanceMail;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\DB;
 
 class OrdonnancesController extends Controller
-{         
+{
     public function listeordonnances()
     {
-        $ordonnancesAll = Ordonnance::with(['medicament', 'posologie', 'resource'])->get(); 
+        $ordonnancesAll = Ordonnance::with(['medicament', 'posologie', 'patient', 'examen'])->get();
         $medicaments = Medicament::all();
         $examens = Examen::all();
         $posologies = Posologie::all();
-        $patients = Resource::where('role', 'patient')->get();
-        $medecins = Resource::where('role', 'medecin')->get();
+        $patients = Resource::patients()->get();
+        $medecins = Resource::medecins()->get();
+
         return view('ordonnance.listesordonnances',
-            compact('ordonnancesAll','medicaments','posologies','patients','medecins','examens'));
+            compact('ordonnancesAll', 'medicaments', 'posologies', 'patients', 'medecins', 'examens'));
     }
 
     public function certificat($id)
     {
-        $ordonnancesAll = Ordonnance::find($id);
-        $patient = Resource::where('role', 'patient')->where('id', $ordonnancesAll->patient_id)->first();
-        $medecin = Resource::where('role', 'medecin')->first();
+        $ordonnance = Ordonnance::findOrFail($id);
+        $patient = Resource::findOrFail($ordonnance->patient_id);
+        // Le certificat est signé par le médecin qui a rédigé l'ordonnance
+        $medecin = Resource::find($ordonnance->medecin_id);
 
-        return view('ordonnance.certificat', compact('patient','medecin'));
+        return view('ordonnance.certificat', compact('patient', 'medecin'));
     }
-    
+
     public function ajout_ordonnance(Request $request)
     {
         $request->validate([
             'description' => 'required',
-            // 'medicament'=> 'required',
-            'patient' => 'required',
-            'examen' => 'required',
-
+            // Le médicament peut être choisi plus tard (ex. après les résultats d'examen)
+            'medicament' => 'nullable|exists:medicaments,id',
+            'patient' => 'required|exists:resources,id',
+            'examen' => 'required|exists:examens,id',
             'dose' => 'nullable',
             'frequence' => 'nullable',
             'duree' => 'nullable',
         ]);
 
         DB::transaction(function () use ($request) {
+            $posologie = Posologie::create([
+                'dose' => $request->dose,
+                'frequence' => $request->frequence,
+                'duree' => $request->duree,
+            ]);
 
-        $posologie = new Posologie();
-        $posologie->dose = $request->dose; 
-        $posologie->frequence = $request->frequence;
-        $posologie->duree = $request->duree;
-        $posologie->save();
-
-        $ordonnace = new Ordonnance();
-        $ordonnace->description = $request->description;
-        // $ordonnace->medicament_id = $request->medicament;
-        $ordonnace->posologie_id = $posologie->id;
-        $ordonnace->patient_id = $request->patient;
-        $ordonnace->medecin_id = session('id');
-        $ordonnace->examen_id = $request->examen;
-        $ordonnace->save();
-
-        $posologies = Posologie::find($posologie->id);
-            Session::put('duree', $posologies->duree);
-            Session::put('frequence', $posologies->frequence);
-            Session::put('dose', $posologies->dose);
+            Ordonnance::create([
+                'description' => $request->description,
+                'medicament_id' => $request->medicament,
+                'posologie_id' => $posologie->id,
+                'patient_id' => $request->patient,
+                'medecin_id' => auth()->id(),
+                'examen_id' => $request->examen,
+            ]);
         });
 
-        $patients = Resource::where('role', 'patient')->find($request->patient); 
-        $medicaments = Medicament::find($request->medicament);
+        $this->notifierPatient($request, new NewOrdonnanceMail());
 
-            Session::put('nom', $patients->nom_prenom);
-            if($medicaments){
-               Session::put('medicament', $medicaments->nom); 
-        // Envoyer la notification d'ordonnance
-        Mail::to($patients->email)->send(new NewOrdonnanceMail());
-            }else{
-        Mail::to($patients->email)->send(new AttenteNewOrdonnanceMail()); 
-            }
-            
-        
-
-        return redirect('/listesordonnances')->with('status', 'L\'ordonnance a ete ajouté avec succes.');
+        return redirect('/listesordonnances')->with('status', 'L\'ordonnance a été ajoutée avec succès.');
     }
-    
+
     public function update_id_ordonnance($id)
     {
-
-        $ordonnancesAll = Ordonnance::with(['medicament', 'posologie', 'resource', 'examen'])->get()->find($id);
-        $ordonnances = Ordonnance::find($id);
+        $ordonnancesAll = Ordonnance::with(['medicament', 'posologie', 'patient', 'examen'])->findOrFail($id);
+        $ordonnances = $ordonnancesAll;
         $medicaments = Medicament::all();
         $examens = Examen::all();
         $posologies = Posologie::all();
-        $patients = Resource::where('role', 'patient')->get();
-        $posologiess = Posologie::find($ordonnancesAll->posologie_id);
+        $patients = Resource::patients()->get();
+        $posologiess = $ordonnancesAll->posologie;
+
         return view('ordonnance.updateordonnance',
-            compact('ordonnancesAll','ordonnances','medicaments','posologies','patients','posologiess','examens'));
-            
+            compact('ordonnancesAll', 'ordonnances', 'medicaments', 'posologies', 'patients', 'posologiess', 'examens'));
     }
-    
+
     public function imprimer($id)
     {
+        $ordonnancesAll = Ordonnance::with(['medicament', 'posologie', 'examen'])->findOrFail($id);
+        $patients = Resource::findOrFail($ordonnancesAll->patient_id);
+        $medecins = Resource::find($ordonnancesAll->medecin_id);
 
-        $ordonnancesAll = Ordonnance::find($id);
-        $patients = Resource::where('role', 'patient')->where('id', $ordonnancesAll->patient_id)->first();
-        $medecins = Resource::where('role', 'medecin')->where('id', $ordonnancesAll->medecin_id)->first();
-
-        $effectuers = Faire::where('patient_id', $ordonnancesAll->patient_id)->get();
+        $effectuers = Faire::where('patient_id', $patients->id)->get();
         $examens = Examen::get();
-        
+
         $totalCost = DB::table('examens as e')
             ->join('ordonnances as p', 'e.id', '=', 'p.examen_id')
-            ->join('resources as pa', 'p.patient_id', '=', 'pa.id')
-            ->where('pa.id', $patients->id)
+            ->where('p.patient_id', $patients->id)
             ->sum('e.cout');
 
         $totalMedicament = DB::table('medicaments as e')
             ->join('ordonnances as p', 'e.id', '=', 'p.medicament_id')
-            ->join('resources as pa', 'p.patient_id', '=', 'pa.id')
-            ->where('pa.id', $patients->id)
+            ->where('p.patient_id', $patients->id)
             ->sum('e.cout');
 
         return view('ordonnance.imprimer',
-            compact('ordonnancesAll','patients','medecins','effectuers','examens','totalCost','totalMedicament'));
-            
+            compact('ordonnancesAll', 'patients', 'medecins', 'effectuers', 'examens', 'totalCost', 'totalMedicament'));
     }
 
     public function update_ordonnance_traitement(Request $request)
     {
         $request->validate([
+            'id' => 'required|exists:ordonnances,id',
             'description' => 'required',
-            'medicament'=>'nullable',
-            'patient' => 'required',
-            'examen' => 'required',
-
+            'medicament' => 'nullable|exists:medicaments,id',
+            'patient' => 'required|exists:resources,id',
+            'examen' => 'required|exists:examens,id',
             'dose' => 'nullable',
             'frequence' => 'nullable',
             'duree' => 'nullable',
         ]);
 
         DB::transaction(function () use ($request) {
+            $ordonnance = Ordonnance::findOrFail($request->id);
 
-        $posologie = Posologie::find($request->id);
-        $posologie->dose = $request->dose;
-        $posologie->frequence = $request->frequence;
-        $posologie->duree = $request->duree;
-        $posologie->update();
+            // On modifie la posologie liée à CETTE ordonnance (et non celle qui aurait le même numéro)
+            $posologie = Posologie::find($ordonnance->posologie_id) ?? new Posologie();
+            $posologie->dose = $request->dose;
+            $posologie->frequence = $request->frequence;
+            $posologie->duree = $request->duree;
+            $posologie->save();
 
-        $ordonnace = Ordonnance::find($request->id);
-        $ordonnace->description = $request->description;
-        $ordonnace->medicament_id = $request->medicament;
-        $ordonnace->posologie_id = $posologie->id;
-        $ordonnace->patient_id = $request->patient;
-        $ordonnace->medecin_id = session('id');
-        $ordonnace->examen_id = $request->examen;
-        $ordonnace->update();
+            $ordonnance->description = $request->description;
+            $ordonnance->medicament_id = $request->medicament;
+            $ordonnance->posologie_id = $posologie->id;
+            $ordonnance->patient_id = $request->patient;
+            $ordonnance->medecin_id = auth()->id();
+            $ordonnance->examen_id = $request->examen;
+            $ordonnance->save();
+        });
 
-        $posologies = Posologie::find($posologie->id);
-            Session::put('duree', $posologies->duree);
-            Session::put('frequence', $posologies->frequence);
-            Session::put('dose', $posologies->dose);
-    });  
-        
-        $patients = Resource::where('role', 'patient')->find($request->patient);
-        $medicaments = Medicament::find($request->medicament);
+        $this->notifierPatient($request, new UpdateOrdonnanceMail());
 
-             Session::put('nom', $patients->nom_prenom);
-             if($medicaments){
-                Session::put('medicament', $medicaments->nom); 
-         // Envoyer la notification d'ordonnance
-         Mail::to($patients->email)->send(new UpdateOrdonnanceMail());
-             }else{
-         Mail::to($patients->email)->send(new AttenteNewOrdonnanceMail()); 
-             }
-        
-
-        return redirect('/listesordonnances');
-        
+        return redirect('/listesordonnances')->with('status', 'L\'ordonnance a été modifiée avec succès.');
     }
 
     public function delete_id_ordonnance($id)
     {
-        $ordonnance = Ordonnance::find($id);
+        $ordonnance = Ordonnance::findOrFail($id);
+        $posologieId = $ordonnance->posologie_id;
         $ordonnance->delete();
 
-        return redirect('/listesordonnances')->with('status', 'L\'ordonnance a ete supprimé avec succes.');
+        // La posologie n'appartient qu'à cette ordonnance : on la supprime aussi
+        Posologie::whereKey($posologieId)->delete();
+
+        return redirect('/listesordonnances')->with('status', 'L\'ordonnance a été supprimée avec succès.');
     }
-    
+
+    /**
+     * Prévient le patient par e-mail. Sans médicament, il reçoit le message « en attente ».
+     */
+    private function notifierPatient(Request $request, $mailAvecMedicament): void
+    {
+        $patient = Resource::find($request->patient);
+        $medicament = Medicament::find($request->medicament);
+
+        // Données lues par les modèles d'e-mail
+        Session::put('nom', $patient?->nom_prenom);
+        Session::put('dose', $request->dose);
+        Session::put('frequence', $request->frequence);
+        Session::put('duree', $request->duree);
+
+        if ($medicament) {
+            Session::put('medicament', $medicament->nom);
+            $this->envoyerMail($patient?->email, $mailAvecMedicament);
+        } else {
+            $this->envoyerMail($patient?->email, new AttenteNewOrdonnanceMail());
+        }
+    }
 }

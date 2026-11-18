@@ -11,14 +11,14 @@ class ParamsController extends Controller
     public function listeparams()
     {
         $params = Param::all();
-        $resources = Resource::where('role', 'patient')->get();
+        $resources = Resource::patients()->get();
         return view('patients.listespatients', compact('params', 'resources'));
     }
 
     public function ajout_param(Request $request)
     {
         $request->validate([
-            'patient' => 'required',
+            'patient' => 'required|exists:resources,id',
             'poids' => 'required',
             'taille' => 'required',
             'temperature' => 'required',
@@ -40,15 +40,15 @@ class ParamsController extends Controller
      
     public function update_id_param($id)
     {
-        $params = Param::find($id);
-        $resources = Resource::all();
+        $params = Param::findOrFail($id);
+        $resources = Resource::patients()->get();
         return view('patients.updateparams', compact('params','resources'));
     }
 
     public function update_param_traitement(Request $request)
     {
         $request->validate([
-            'patient' => 'required',
+            'patient' => 'required|exists:resources,id',
             'poids' => 'required',
             'taille' => 'required',
             'temperature' => 'required',
@@ -57,7 +57,7 @@ class ParamsController extends Controller
         ]);
 
         
-        $param = Param::find($request->id);
+        $param = Param::findOrFail($request->id);
         $param->poids = $request->poids;
         $param->taille = $request->taille;
         $param->temperature = $request->temperature;
@@ -72,7 +72,7 @@ class ParamsController extends Controller
     
     public function delete_id_param($id)
     {
-        $param = Param::find($id);
+        $param = Param::findOrFail($id);
         $param->delete();
 
         return redirect('/listeparams')->with('status', 'Le parametre a ete supprimé avec succes.');

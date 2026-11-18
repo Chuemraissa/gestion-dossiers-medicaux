@@ -18,13 +18,18 @@ class Faire extends Model
         'resultat',
     ];
     
-    public function resources()
+    public function patient()
     {
-       return $this->belongsToMany(Resource::class); 
+        return $this->belongsTo(Resource::class, 'patient_id');
+    }
+
+    public function laborantin()
+    {
+        return $this->belongsTo(Resource::class, 'laborantin_id');
     }
     
     public function examen()
     {
-       return $this->belongsToMany(Examen::class); 
+       return $this->belongsTo(Examen::class);
     }
 }

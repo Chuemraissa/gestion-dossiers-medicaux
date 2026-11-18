@@ -30,7 +30,7 @@
                             @foreach($resources as $resource)
                                 @if($resource->id == $antecedents->resource_id)
                                     <option value="{{ $resource->id }}" selected>{{ $resource->nom_prenom }}</option>
-                                @elseif ($resource->role == 'patient')
+                                @else
                                     <option value="{{ $resource->id }}">{{ $resource->nom_prenom }}</option>
                                 @endif
                             @endforeach

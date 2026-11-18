@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
 use App\Models\Resource;
 use App\Models\Rendez_vous;
 use App\Mail\NewRendezVousMail;
@@ -10,177 +13,158 @@ use App\Mail\MedecinNewRendezVousMail;
 use App\Mail\UpdateRendezVousMail;
 use App\Notifications\AppointmentCreated;
 use App\Notifications\AppointmentCreatedMedecin;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Artisan;
-use Carbon\Carbon;
 
 class RdvController extends Controller
-{         
+{
+    /**
+     * Nombre d'heures avant le rendez-vous où le rappel est envoyé.
+     */
+    private const HEURES_AVANT_RAPPEL = 5;
+
     public function listeRDV()
     {
         $rdvs = Rendez_vous::all();
-        
-        $patients = Resource::where('role', 'patient')->get();
-        $medecins = Resource::whereIn('role', ['admin', 'medecin'])->get();
-        return view('ordonnance.listesordonnances', compact('rdvs','patients','medecins'));
+        $patients = Resource::patients()->get();
+        $medecins = Resource::medecins()->get();
+
+        return view('ordonnance.listesordonnances', compact('rdvs', 'patients', 'medecins'));
     }
 
     public function calendar()
     {
         $appointments = Rendez_vous::all();
-        $patients = Resource::where('role', 'patient')->get();
-        $medecins = Resource::whereIn('role', ['admin', 'medecin'])->get();
+        $patients = Resource::patients()->get();
+        $medecins = Resource::medecins()->get();
 
         return view('planing.calendar', compact('appointments', 'patients', 'medecins'));
     }
-    
+
     public function ajout_RDV(Request $request)
     {
         $request->validate([
-            'date' => 'required',
+            'date' => 'required|date',
             'heure' => 'required',
             'statut' => 'required',
             'motif' => 'required',
-            'patient' => 'required',
+            'patient' => 'required|exists:resources,id',
         ]);
-    
-        // Vérifier si l'heure du rendez-vous est déjà prise
-        $existingAppointment = Rendez_vous::where('date', $request->date)
-            ->where('heure', $request->heure)
-            ->first();
-    
-        if ($existingAppointment) {
-            // Si l'heure est déjà prise, retourner une erreur
+
+        if ($this->heureDejaPrise($request->date, $request->heure)) {
             return redirect()->back()
                 ->withErrors(['heure' => 'Cette heure est déjà prise. Veuillez choisir une autre heure.'])
                 ->withInput();
         }
-    
+
         $rdv = new Rendez_vous();
         $rdv->date = $request->date;
         $rdv->heure = $request->heure;
         $rdv->statut = $request->statut;
         $rdv->motif = $request->motif;
         $rdv->patient_id = $request->patient;
-        $rdv->medecin_id = session('id');
+        $rdv->medecin_id = auth()->id();
         $rdv->save();
-    
-        $patients = Resource::where('role', 'patient')->find($request->patient);
-        $patient = Resource::where('email', $patients->email)->first();
 
-        $medecin = Resource::where('email', session('mail'))->first(); 
-    
-        Session::put('patient', $patients->nom_prenom);
-        Session::put('medecin', session('nomuser'));
-        Session::put('date', $request->date);
-        Session::put('heure', $request->heure);
-        Session::put('statut', $request->statut);
+        $patient = Resource::findOrFail($request->patient);
+        $medecin = auth()->user();
 
-        Mail::to($patients->email)->send(new NewRendezVousMail());
-        Mail::to(session('mail'))->send(new MedecinNewRendezVousMail());
+        $this->preparerDonneesMail($patient, $request);
+        $this->envoyerMail($patient->email, new NewRendezVousMail());
+        $this->envoyerMail($medecin->email, new MedecinNewRendezVousMail());
 
-        // Créer un objet Carbon avec la date et l'heure du rendez-vous
+        $this->programmerRappels($patient, $medecin, $request);
 
-        // Récupérer la date et l'heure depuis le formulaire
-        $date1 = Carbon::createFromFormat('Y-m-d H:i', $request->date . ' ' . $request->heure);
-
-        // Définir le fuseau horaire par défaut sur le Cameroun
-        date_default_timezone_set('Africa/Douala');
-
-        // Récupérer l'heure actuelle dans le fuseau horaire du Cameroun
-        $datee = Carbon::now('Africa/Douala')->format('Y-m-d H:i');
-        $date1 = Carbon::createFromFormat('Y-m-d H:i', $request->date . ' ' . $request->heure);
-        $date2 = Carbon::createFromFormat('Y-m-d H:i', $datee);
-
-        // Calculer la différence en minutes
-        $minutesDiff = intval($date2->diffInMinutes($date1));
-
-
-        // Soustraire 5 heures à la différence en minutes
-        $delaiMinutes = $minutesDiff - (5 * 60);
-
-        $patient1 = session('patient');
-        $medecin1 = session('medecin');
-        $date1 = session('date');
-        $heure1 = session('heure');
-        $statut1 = session('statut');
-
-        // Envoi de la notification par email avec un délai de n minutes
-        $patient->notify((new AppointmentCreated($patient1,$medecin1,$date1,$heure1,$statut1))->delay(now()->addMinutes($delaiMinutes)));
-        $medecin->notify((new AppointmentCreatedMedecin($patient1,$medecin1,$date1,$heure1,$statut1))->delay(now()->addMinutes($delaiMinutes))); 
-    
         return redirect('/listesRDV')->with('status', 'Le rendez-vous a été ajouté avec succès.');
     }
 
-    
     public function update_id_RDV($id)
     {
-        $rdv = Rendez_vous::find($id);
-        
-        $patients = Resource::where('role', 'patient')->get();
-        return view('RDV.updaterdv', compact('rdv','patients'));
-            
+        $rdv = Rendez_vous::findOrFail($id);
+        $patients = Resource::patients()->get();
+
+        return view('RDV.updaterdv', compact('rdv', 'patients'));
     }
 
     public function update_RDV_traitement(Request $request)
     {
         $request->validate([
-            'date' => 'required',
+            'id' => 'required|exists:rendez_vouses,id',
+            'date' => 'required|date',
             'heure' => 'required',
             'statut' => 'required',
             'motif' => 'required',
-            'patient' => 'required',
+            'patient' => 'required|exists:resources,id',
         ]);
-    
-        // Récupérer le rendez-vous à mettre à jour
-        $rdv = Rendez_vous::find($request->id);
-    
-        // Vérifier si l'heure du rendez-vous est déjà prise
-        $existingAppointment = Rendez_vous::where('date', $request->date)
-            ->where('heure', $request->heure)
-            ->where('id', '!=', $request->id)
-            ->first();
-    
-        if ($existingAppointment) {
-            // Si l'heure est déjà prise, retourner une erreur
+
+        $rdv = Rendez_vous::findOrFail($request->id);
+
+        if ($this->heureDejaPrise($request->date, $request->heure, $rdv->id)) {
             return redirect()->back()
                 ->withErrors(['heure' => 'Cette heure est déjà prise. Veuillez choisir une autre heure.'])
                 ->withInput();
         }
-    
-        // Mettre à jour les informations du rendez-vous
+
         $rdv->date = $request->date;
         $rdv->heure = $request->heure;
         $rdv->statut = $request->statut;
         $rdv->motif = $request->motif;
         $rdv->patient_id = $request->patient;
-        $rdv->medecin_id = session('id');
-        $rdv->update();
-    
-        
-        $patients = Resource::where('role', 'patient')->find($request->patient);
-        $medecins = Resource::whereIn('role', ['admin', 'medecin'])->find($request->medecin);
+        $rdv->medecin_id = auth()->id();
+        $rdv->save();
 
-            Session::put('patient', $patients->nom_prenom);
-            Session::put('medecin', session('nomuser'));
-            Session::put('date', $request->date);
-            Session::put('heure', $request->heure);
-            Session::put('statut', $request->statut);
+        $patient = Resource::findOrFail($request->patient);
+        $this->preparerDonneesMail($patient, $request);
+        $this->envoyerMail($patient->email, new UpdateRendezVousMail());
 
-        
-        // Envoyer la notification d'ordonnance
-        Mail::to($patients->email)->send(new UpdateRendezVousMail());
-
-        return redirect('/listesRDV');
+        return redirect('/listesRDV')->with('status', 'Le rendez-vous a été modifié avec succès.');
     }
 
     public function delete_id_RDV($id)
     {
-        $rdv = Rendez_vous::find($id);
+        $rdv = Rendez_vous::findOrFail($id);
         $rdv->delete();
 
-        return redirect('/listesRDV')->with('status', 'Le rendez-vous a ete supprimé avec succes.');
+        return redirect('/listesRDV')->with('status', 'Le rendez-vous a été supprimé avec succès.');
     }
-    
+
+    private function heureDejaPrise(string $date, string $heure, ?int $saufId = null): bool
+    {
+        return Rendez_vous::where('date', $date)
+            ->where('heure', $heure)
+            ->when($saufId, fn ($query) => $query->where('id', '!=', $saufId))
+            ->exists();
+    }
+
+    /**
+     * Données lues par les modèles d'e-mail des rendez-vous.
+     */
+    private function preparerDonneesMail(Resource $patient, Request $request): void
+    {
+        Session::put('patient', $patient->nom_prenom);
+        Session::put('medecin', auth()->user()->nom_prenom);
+        Session::put('date', $request->date);
+        Session::put('heure', $request->heure);
+        Session::put('statut', $request->statut);
+    }
+
+    /**
+     * Programme l'e-mail de rappel quelques heures avant le rendez-vous.
+     * Les rappels sont mis en file d'attente : ils partent seulement si la commande
+     * « php artisan queue:work » tourne (voir README).
+     */
+    private function programmerRappels(Resource $patient, Resource $medecin, Request $request): void
+    {
+        try {
+            $dateRdv = Carbon::parse($request->date.' '.$request->heure, config('app.timezone'));
+            $dateRappel = $dateRdv->copy()->subHours(self::HEURES_AVANT_RAPPEL);
+            // Si le rendez-vous est très proche, le rappel part tout de suite
+            $envoi = $dateRappel->isFuture() ? $dateRappel : now();
+
+            $infos = [$patient->nom_prenom, $medecin->nom_prenom, $request->date, $request->heure, $request->statut];
+
+            $patient->notify((new AppointmentCreated(...$infos))->delay($envoi));
+            $medecin->notify((new AppointmentCreatedMedecin(...$infos))->delay($envoi));
+        } catch (\Throwable $e) {
+            Log::warning('Rappel de rendez-vous non programmé : '.$e->getMessage());
+        }
+    }
 }

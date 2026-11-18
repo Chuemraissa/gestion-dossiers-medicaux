@@ -11,14 +11,14 @@ class AntecedentsController extends Controller
     public function listeantecedent()
     {
         $antecedents = Antecedent::all();
-        $resources = Resource::where('role', 'patient')->get();
+        $resources = Resource::patients()->get();
         return view('patients.listespatients', compact('antecedents', 'resources'));
     }
 
     public function ajout_antecedent(Request $request)
     {
         $request->validate([
-            'patient' => 'required',
+            'patient' => 'required|exists:resources,id',
             'type_antecedent' => 'required',
             'description_antecedent' => 'required',
         ]);
@@ -35,21 +35,21 @@ class AntecedentsController extends Controller
     
     public function update_id_antecedent($id)
     {
-        $antecedents = Antecedent::find($id);
-        $resources = Resource::all();
+        $antecedents = Antecedent::findOrFail($id);
+        $resources = Resource::patients()->get();
         return view('patients.updateantecedents', compact('antecedents','resources'));
     }
 
     public function update_antecedent_traitement(Request $request)
     {
         $request->validate([
-            'patient' => 'required',
+            'patient' => 'required|exists:resources,id',
             'type_antecedent' => 'required',
             'description_antecedent' => 'required',
 
         ]);
 
-        $antecedent = Antecedent::find($request->id);
+        $antecedent = Antecedent::findOrFail($request->id);
         $antecedent->type = $request->type_antecedent;
         $antecedent->description = $request->description_antecedent;
         $antecedent->resource_id = $request->patient;
@@ -61,7 +61,7 @@ class AntecedentsController extends Controller
     
     public function delete_id_antecedent($id)
     {
-        $antecedent = Antecedent::find($id);
+        $antecedent = Antecedent::findOrFail($id);
         $antecedent->delete();
 
         return redirect('/listeantecedents')->with('status', 'L\'utilisateur a ete supprimé avec succes.');

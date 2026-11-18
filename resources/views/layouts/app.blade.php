@@ -34,14 +34,14 @@
 
 
 <body class="g-sidenav-show  bg-gray-100">  
-    @if(session('role') == 'admin' || session('role') == 'laborantin' || session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere' || session('role') == 'charge_acceuil' || session('role') == 'pharmacien') 
+    @if(auth()->user()?->aAcces('tableau_de_bord')) 
     <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
 
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-            <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
+            <a class="navbar-brand m-0" href="/">
             <img src="{{ asset('images/logo.jpg') }}" class="navbar-brand-img h-100" alt="main_logo"> 
-            <span class="ms-1 font-weight-bold text-white">{{ session('role') }}</span>
+            <span class="ms-1 font-weight-bold text-white">{{ auth()->user()?->roleModel?->libelle ?? session('role') }}</span>
             </a>
         </div>
 
@@ -49,7 +49,7 @@
 
         <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
             <ul class="navbar-nav"> 
-                    @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'pharmacien' || session('role') == 'laborantin' || session('role') == 'infirmiere' || session('role') == 'laborantin' || session('role') == 'charge_acceuil') 
+                    @if(auth()->user()?->aAcces('tableau_de_bord')) 
                 <li class="nav-item">
                     <a class="nav-link text-white " href="/">
                         
@@ -60,7 +60,7 @@
                         <span class="nav-link-text ms-1 font-weight-bold text-white">@lang('messages.acceuil')</span>
                     </a>
                 </li>
-                    @if(session('role') == 'charge_acceuil' || session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere')
+                    @if(auth()->user()?->aAcces('patients'))
                 <li class="nav-item">
                     <a class="nav-link text-white " href="/listespatients">
                         
@@ -73,7 +73,7 @@
                 </li>
                     @endif
                     @endif
-                    @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere')
+                    @if(auth()->user()?->aAcces('consultations'))
                 <li class="nav-item">
                     <a class="nav-link text-white " href="/listesconsultations">
                         
@@ -85,7 +85,7 @@
                     </a>
                 </li>
                     @endif
-            @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere' || session('role') == 'laborantin') 
+            @if(auth()->user()?->aAcces('ordonnances')) 
                 <li class="nav-item">
                     <a class="nav-link text-white " href="/listesordonnances">
                         
@@ -97,7 +97,7 @@
                     </a>
                 </li>
             @endif
-                    @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere')
+                    @if(auth()->user()?->aAcces('rendez_vous'))
                 <li class="nav-item">
                     <a class="nav-link text-white " href="/listesRDV">
                         
@@ -109,7 +109,7 @@
                     </a>
                 </li>
                     @endif
-                @if(session('role') == 'laborantin' || session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere')
+                @if(auth()->user()?->aAcces('examens'))
                 <li class="nav-item">
                     <a class="nav-link text-white " href="/listesexamens">
                         
@@ -121,7 +121,7 @@
                     </a>
                 </li>
                 @endif
-                    @if(session('role') == 'laborantin' || session('role') == 'pharmacien' || session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere')
+                    @if(auth()->user()?->aAcces('medicaments'))
                 <li class="nav-item">
                     <a class="nav-link text-white " href="/listemedicaments">
                         
@@ -133,7 +133,7 @@
                     </a>
                 </li>
                     @endif
-                    @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere')
+                    @if(auth()->user()?->aAcces('rendez_vous'))
                 <li class="nav-item">
                     <a class="nav-link text-white " href="/planing">
                         
@@ -145,9 +145,9 @@
                     </a>
                 </li>
                     @endif
-                @if(session('role') == 'admin')
+                @if(auth()->user()?->aAcces('gestion_personnel'))
                 <li class="nav-item">
-                    <a class="nav-link text-white " href="/listesCAs">
+                    <a class="nav-link text-white " href="/personnel">
                         
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10 bi bi-people-fill"></i>
@@ -157,7 +157,7 @@
                     </a>
                 </li>
                 @endif
-            @if(session('role') == 'admin' || session('role') == 'pharmacien' || session('role') == 'laborantin' || session('role') == 'infirmiere' || session('role') == 'charge_acceuil' || session('role') == 'medecin') 
+            @if(auth()->user()?->aAcces('tableau_de_bord')) 
                 <li class="nav-item">
                     <a class="nav-link text-white " href="/aide">
                         
@@ -173,7 +173,7 @@
         </div>
         <div class="sidenav-footer position-absolute w-100 bottom-0 ">
             <div class="mx-3 text-dark font-weight-bold">
-                <a class="btn bg-gradient-primary w-100" href="https://www.creative-tim.com/product/material-dashboard-pro?ref=sidebarfree" type="button">@lang('messages.connecte') <br/> {{ session('nomuser') }} </a>
+                <a class="btn bg-gradient-primary w-100" href="#" type="button">@lang('messages.connecte') <br/> {{ session('nomuser') }} </a>
             </div>   
         </div> 
     </aside>
@@ -193,16 +193,19 @@
                                 Lang
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="locale/fr">Français</a>
-                                <a class="dropdown-item" href="locale/en">English</a>
-                                <a class="dropdown-item" href="locale/all">Allemand</a>
-                                <a class="dropdown-item" href="locale/esp">Espagnol</a>
-                                <a class="dropdown-item" href="locale/chin">Chinois</a>
+                                <a class="dropdown-item" href="/locale/fr">Français</a>
+                                <a class="dropdown-item" href="/locale/en">English</a>
+                                <a class="dropdown-item" href="/locale/all">Allemand</a>
+                                <a class="dropdown-item" href="/locale/esp">Espagnol</a>
+                                <a class="dropdown-item" href="/locale/chin">Chinois</a>
                             </div>
                         </div>
                     </nav>
                     <nav aria-label="breadcrumb">
-                    <a href="/login"> <i class="material-icons opacity-10 bi bi-box-arrow-right"></i>@lang('messages.deconnect') </a>
+                    <form method="POST" action="{{ route('logout') }}" class="m-0">
+                        @csrf
+                        <button type="submit" class="btn btn-link p-0 m-0"><i class="material-icons opacity-10 bi bi-box-arrow-right"></i>@lang('messages.deconnect')</button>
+                    </form>
                     </nav>
                 </div>
             </div>

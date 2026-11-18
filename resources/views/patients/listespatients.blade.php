@@ -10,7 +10,7 @@
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item"><a class="nav-link {{ request()->is('listespatients') ? 'active': null }}" href="{{ url('listespatients') }}" role="tab">@lang('messages.patients')</a></li>
     <li class="nav-item"><a class="nav-link {{ request()->is('listeparams') ? 'active': null }}" href="{{ url('listeparams') }}" role="tab">@lang('messages.parametre')</a></li>
-    @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere') 
+    @if(auth()->user()?->aAcces('consultations')) 
     <li class="nav-item"><a class="nav-link {{ request()->is('listeantecedents') ? 'active': null }}" href="{{ url('listeantecedents') }}" role="tab">@lang('messages.antecedent')</a></li>
     @endif
   </ul>
@@ -104,7 +104,7 @@
                     <div class="mb-3" style ="display: none;">
                       <label class="form-label" for="role">@lang('messages.role')</label>
                       <select class="form-control" id="role" name="role">
-                        <option value="patient">@lang('messages.patients')</option>
+                        <option value="{{ \App\Models\Role::codePatient() }}">@lang('messages.patients')</option>
                       </select>
                     </div>
                   </div>
@@ -238,7 +238,7 @@
                     <div class="mb-3" style ="display: none;">
                       <label class="form-label" for="role">@lang('messages.role')</label>
                       <select class="form-control" id="role" name="role">
-                        <option value="patient">@lang('messages.patients')</option>
+                        <option value="{{ \App\Models\Role::codePatient() }}">@lang('messages.patients')</option>
                       </select>
                     </div>
                   </div>

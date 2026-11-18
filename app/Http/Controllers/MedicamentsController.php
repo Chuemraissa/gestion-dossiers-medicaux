@@ -19,9 +19,9 @@ class MedicamentsController extends Controller
     {
         $request->validate([
             'nom' => 'required',
-            'quantite' => 'required',
-            'categorie' => 'required',
-            'cout' => 'required',
+            'quantite' => 'required|integer|min:0',
+            'categorie' => 'required|exists:categories,id',
+            'cout' => 'required|numeric|min:0',
         ]);
     
             $medicament = new Medicament();
@@ -36,7 +36,7 @@ class MedicamentsController extends Controller
     
     public function update_id_medicament($id)
     {
-        $medicaments = Medicament::with('categorie')->get()->find($id);
+        $medicaments = Medicament::with('categorie')->findOrFail($id);
         $categories = Categorie::all();
         return view('ordonnance.updatemedicaments', compact('medicaments', 'categories'));
     }
@@ -45,12 +45,12 @@ class MedicamentsController extends Controller
     {
         $request->validate([
             'nom' => 'required',
-            'quantite' => 'required',
-            'categorie' => 'required',
-            'cout' => 'required',
+            'quantite' => 'required|integer|min:0',
+            'categorie' => 'required|exists:categories,id',
+            'cout' => 'required|numeric|min:0',
         ]);
     
-        $medicament = Medicament::find($request->id);
+        $medicament = Medicament::findOrFail($request->id);
         $medicament->nom = $request->nom;
         $medicament->quantite = $request->quantite;
         $medicament->categorie_id = $request->categorie;
@@ -63,7 +63,7 @@ class MedicamentsController extends Controller
     
     public function delete_id_medicament($id)
     {
-        $medicament = Medicament::find($id);
+        $medicament = Medicament::findOrFail($id);
         $medicament->delete();
 
         return redirect('/listemedicaments');

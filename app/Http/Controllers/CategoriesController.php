@@ -28,7 +28,7 @@ class CategoriesController extends Controller
     
     public function update_id_categorie($id)
     {
-        $categories = Categorie::find($id);
+        $categories = Categorie::findOrFail($id);
         return view('ordonnance.updatecategories', compact('categories'));
     }
 
@@ -38,7 +38,7 @@ class CategoriesController extends Controller
             'nom' => 'required',
         ]);
 
-        $categorie = Categorie::find($request->id);
+        $categorie = Categorie::findOrFail($request->id);
         $categorie->nom = $request->nom;
         $categorie->update();  
 
@@ -48,7 +48,7 @@ class CategoriesController extends Controller
 
     public function delete_id_categorie($id)
     {
-        $categorie = Categorie::find($id);
+        $categorie = Categorie::findOrFail($id);
         $categorie->delete();
 
         return redirect('/listecategories');

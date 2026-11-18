@@ -19,10 +19,7 @@ class Examen extends Model
     ];
 
     
-    public function resources()
-    {
-       return $this->belongsToMany(Resource::class); 
-    }
+
 
     
     public function faires()

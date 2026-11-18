@@ -19,8 +19,13 @@ class Consulter extends Model
         'cout',
     ];
     
-    public function resources()
+    public function patient()
     {
-       return $this->belongsToMany(Resource::class); 
+        return $this->belongsTo(Resource::class, 'patient_id');
+    }
+
+    public function medecin()
+    {
+        return $this->belongsTo(Resource::class, 'medecin_id');
     }
 }

@@ -21,7 +21,7 @@
       <button id="print-btn" class="btn btn-primary mr-2"><i class="fas fa-print mr-2"></i>Imprimer</button>
     </div>
     <div class="row gx-4 mb-5">
-    @if(session('role') == 'admin' || session('role') == 'medecin' || session('role') == 'infirmiere')
+    @if(auth()->user()?->aAcces('consultations'))
       <div class="col-md-2 mt-3 mr-5">
         <a href="/vue-consultations/{{ $resource->id }}"  id="print-btn" class="btn btn-primary" style="font-size: 0.8rem;">Retour</a>
       </div>

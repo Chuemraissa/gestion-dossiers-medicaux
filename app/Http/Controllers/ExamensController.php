@@ -18,7 +18,7 @@ class ExamensController extends Controller
         $request->validate([
             'type_examen' => 'required',
             'description_examen' => 'required',
-            'cout' => 'required',
+            'cout' => 'required|numeric|min:0',
         ]);
     
             $Examen = new Examen();
@@ -32,7 +32,7 @@ class ExamensController extends Controller
     
     public function update_id_examen($id)
     {
-        $examens = Examen::find($id);
+        $examens = Examen::findOrFail($id);
         return view('examen.updateexamens', compact('examens'));
     }
 
@@ -41,10 +41,10 @@ class ExamensController extends Controller
         $request->validate([
             'type_examen' => 'required',
             'description_examen' => 'required',
-            'cout' => 'required',
+            'cout' => 'required|numeric|min:0',
         ]);
     
-            $Examen = Examen::find($request->id);
+            $Examen = Examen::findOrFail($request->id);
             $Examen->type = $request->type_examen;
             $Examen->description = $request->description_examen;
             $Examen->cout = $request->cout;
@@ -56,7 +56,7 @@ class ExamensController extends Controller
     
     public function delete_id_examen($id)
     {
-        $examen = Examen::find($id);
+        $examen = Examen::findOrFail($id);
         $examen->delete();
 
         return redirect('/listesexamens')->with('status', 'L\'utilisateur a ete supprimé avec succes.');

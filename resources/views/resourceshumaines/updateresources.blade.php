@@ -61,82 +61,30 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="password">Password</label>
-                        <input type="password" class="form-control" value="{{ $resources->password }}" name="password" id="password">
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Laisser vide pour garder le mot de passe actuel" autocomplete="new-password">
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="password">Confirmer Password</label>
-                        <input type="password" class="form-control" value="{{ $resources->password }}" name="password_confirmation" id="password">
+                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" autocomplete="new-password">
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="role">Role</label>
                         <select class="form-control" id="role" name="role">
-                        <option value="{{ $resources->role }}">{{ $resources->role }}</option>
-                        @if(session('role') == 'admin')
-                        @if ($resources->role == 'medecin')
-                        <option value="charge_acceuil">Chargé d'acceuil</option>
-                        <option value="infirmiere">Infirmiere</option>
-                        <option value="laborantin">Laborantin</option>
-                        <option value="pharmacien">Pharmacien</option>
-                        <option value="patient">Patient</option>
-                            @endif
-                            @if ($resources->role == 'charge_acceuil')
-                        <option value="patient">Patient</option>
-                        <option value="medecin">Medecin</option>
-                        <option value="infirmiere">Infirmiere</option>
-                        <option value="laborantin">Laborantin</option>
-                        <option value="pharmacien">Pharmacien</option>
-                            @endif
-                            @if ($resources->role == 'infirmiere')
-                        <option value="patient">Patient</option>
-                        <option value="medecin">Medecin</option>
-                        <option value="charge_acceuil">Chargé d'acceuil</option>
-                        <option value="laborantin">Laborantin</option>
-                        <option value="pharmacien">Pharmacien</option>
-                            @endif
-                            @if ($resources->role == 'laborantin')
-                        <option value="patient">Patient</option>
-                        <option value="medecin">Medecin</option>
-                        <option value="pharmacien">Pharmacien</option>
-                        <option value="charge_acceuil">Chargé d'acceuil</option>
-                        <option value="infirmiere">Infirmiere</option>
-                            @endif
-                            @if ($resources->role == 'pharmacien')
-                        <option value="patient">Patient</option>
-                        <option value="medecin">Medecin</option>
-                        <option value="laborantin">Laborantin</option>
-                        <option value="charge_acceuil">Chargé d'acceuil</option>
-                        <option value="infirmiere">Infirmiere</option>
-                            @endif
-                            @if ($resources->role == 'patient')
-                        <option value="laborantin">Laborantin</option>
-                        <option value="medecin">Medecin</option>
-                        <option value="pharmacien">Pharmacien</option>
-                        <option value="charge_acceuil">Chargé d'acceuil</option>
-                        <option value="infirmiere">Infirmiere</option>
-                            @endif
-                            @endif
+                        @foreach($roles as $role)
+                            <option value="{{ $role->code }}" @selected($role->code === $resources->role)>{{ $role->libelle }}</option>
+                        @endforeach
                         </select>
                     </div>
                     </div>
                 </div>
                 </div>
                 <div class="modal-footer">
-                    @if ($resources->role === 'patient')
+                    @if ($resources->estPatient())
                         <a href="/listespatients" class="btn btn-secondary">Annuler</a>
+                    @else
+                        <a href="/personnel/{{ $resources->role }}" class="btn btn-secondary">Annuler</a>
                     @endif
-                    @if ($resources->role === 'infirmiere')
-                        <a href="/listeinfirmieres" class="btn btn-secondary">Annuler</a>
-                    @endif
-                    @if ($resources->role === 'medecin')
-                        <a href="/listemedecins" class="btn btn-secondary">Annuler</a>
-                    @endif
-                    @if ($resources->role === 'charge_acceuil')
-                        <a href="/listesCAs" class="btn btn-secondary">Annuler</a>
-                    @endif
-                    @if ($resources->role === 'laborantin')
-                        <a href="/listelabos" class="btn btn-secondary">Annuler</a>
-                    @endif
-                    
+
                     <button type="submit" class="btn btn-primary">Modifier</button>
                 </div>
             </form>

@@ -108,7 +108,7 @@
           <thead class="bg-primary text-white">
             <tr>
               <th scope="col">NomPatient</th>
-              @if(session('role') == 'admin')
+              @if(auth()->user()?->aAcces('voir_medecin'))
               <th scope="col">NomMedecin</th>
               @endif
               <th scope="col">Motif</th>
@@ -129,7 +129,7 @@
                     @endif
                   @endforeach
                 </td>
-                @if(session('role') == 'admin')
+                @if(auth()->user()?->aAcces('voir_medecin'))
                 <td>
                   @foreach($medecins as $medecin)
                     @if($consulter->medecin_id == $medecin->id)
@@ -145,7 +145,7 @@
                 <td>{{ $consulter->diagnostic}}</td>
                 <td>
                       <a href="/update-consultations/{{ $consulter->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>
-                      @if(session('role') == 'admin' || session('role') == 'medecin') 
+                      @if(auth()->user()?->aAcces('consultations_suppression')) 
                       <a href="/delete-consultations/{{ $consulter->id }}" class="btn btn-danger btn-sm" style="line-height: 1;"><i class="fas fa-trash"></i></a>
                       @endif
                 </td>

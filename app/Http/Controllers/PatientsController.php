@@ -11,18 +11,18 @@ class PatientsController extends Controller
 {
     public function listepatients()
     {
-        $patients = Resource::where('role', 'patient')->get(); 
+        $patients = Resource::patients()->get(); 
         return view('patients.listespatients', compact('patients')); 
     }
     
     public function imprimer()
     {
-        $patients = Resource::where('role', 'patient')->get();
+        $patients = Resource::patients()->get();
         return view('patients.imprimer', compact('patients'));
     }
     
     public function show_patient($id){
-        $resources = Resource::find($id);
+        $resources = Resource::findOrFail($id);
        
         $param = Param::where('resource_id',$resources->id)->get();
         $antecedent = Antecedent::where('resource_id',$resources->id)->get();

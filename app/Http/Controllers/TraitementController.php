@@ -12,8 +12,8 @@ class TraitementController extends Controller
     public function listetraitement()
     {
         $effectuers = Faire::all();        
-        $laborantins = Resource::where('role', ['admin', 'medecin', 'laborantin'])->get();
-        $patients = Resource::where('role', 'patient')->get();
+        $laborantins = Resource::avecAcces('examens_gestion')->get();
+        $patients = Resource::patients()->get();
         $examens = Examen::all();
         return view('ordonnance.listestraitements', compact('effectuers','laborantins','examens','patients'));
     }
@@ -21,13 +21,13 @@ class TraitementController extends Controller
     public function ajout_traitement(Request $request)
     {
         $request->validate([
-            'patient' => 'required',
-            'type' => 'required',
+            'patient' => 'required|exists:resources,id',
+            'type' => 'required|exists:examens,id',
             'resultat' => 'required',
         ]); 
 
         $faire = new Faire();
-        $faire->laborantin_id = session('id');
+        $faire->laborantin_id = auth()->id();
         $faire->examen_id = $request->type;
         $faire->patient_id = $request->patient;
         $faire->resultat = $request->resultat;
@@ -38,8 +38,8 @@ class TraitementController extends Controller
     
     public function update_id_traitement($id)
     {
-        $effectuers = Faire::find($id);
-        $patients = Resource::where('role', 'patient')->get();
+        $effectuers = Faire::findOrFail($id);
+        $patients = Resource::patients()->get();
         $examens = Examen::all();
         return view('examen.updateFaires', compact('effectuers','examens','patients'));
     }
@@ -47,13 +47,13 @@ class TraitementController extends Controller
     public function update_traitement_traitement(Request $request)
     {
         $request->validate([
-            'patient' => 'required',
-            'type' => 'required',
+            'patient' => 'required|exists:resources,id',
+            'type' => 'required|exists:examens,id',
             'resultat' => 'required',
         ]);
 
-        $faire = Faire::find($request->id);
-        $faire->laborantin_id = session('id');
+        $faire = Faire::findOrFail($request->id);
+        $faire->laborantin_id = auth()->id();
         $faire->examen_id = $request->type;
         $faire->patient_id = $request->patient;
         $faire->resultat = $request->resultat;
@@ -65,7 +65,7 @@ class TraitementController extends Controller
 
     public function delete_id_traitement($id)
     {
-        $Faire = Faire::find($id);
+        $Faire = Faire::findOrFail($id);
         $Faire->delete();
 
         return redirect('/listestraitements')->with('status', 'Le laborantin a ete supprimé avec succes.');
