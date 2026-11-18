@@ -1,0 +1,43 @@
+services:
+
+  # ---- Conteneur 1 : le site (Apache + PHP) ----
+  app:
+    build: .                     # construit l'image avec ton Dockerfile
+    image: pfe-laravel           # nom donné à l'image construite
+    ports:
+      - "8000:80"                # http://localhost:8000 sur Windows -> port 80 dans le conteneur
+    env_file: .env               # donne au conteneur les réglages du fichier .env
+    depends_on:
+      db:
+        condition: service_healthy   # attend que MySQL soit prêt avant de démarrer
+    restart: unless-stopped      # redémarre tout seul s'il plante
+
+  # ---- Conteneur 2 : la base de données ----
+  db:
+    image: mysql:8.4             # image officielle de MySQL, sans Dockerfile
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}       # base créée au premier démarrage
+      MYSQL_USER: ${DB_USERNAME}           # utilisateur créé au premier démarrage
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql   # les données sont gardées dans un volume
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s           #le test est refait toutes les 5 secondes.
+      retries: 20            #après 20 échecs de suite, le conteneur est marqué « unhealthy ».
+    restart: unless-stopped
+
+  # ---- Conteneur 3 : les rappels de rendez-vous ----
+  queue:
+    image: pfe-laravel           # même image que "app"
+    command: php artisan queue:work --tries=3   # mais une autre commande
+    user: www-data               # même utilisateur qu'Apache (droits sur storage/)
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  db_data:                       # déclaration du volume utilisé par "db"
