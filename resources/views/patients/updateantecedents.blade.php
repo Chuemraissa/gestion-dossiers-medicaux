@@ -1,0 +1,80 @@
+@extends('layouts.app')
+      
+@section('title')
+    update
+@endsection
+
+@section('content')
+<div class="container-fluid py-5">
+
+  <div class="tabs">
+    <div class="tab-item active">modifier Antecedent</div>
+  </div>
+  <div class="tab-content">
+    <div class="tab-pane active">
+        <div class="modal-content">
+            <form action="/update/antecedent" method="POST">
+              @csrf
+             
+              @foreach ($errors->all() as $error)
+                <h1 class="alert alert-danger"> {{ $error }} </h1>
+              @endforeach
+
+            <input type="text" name="id" style="display: none;" value="{{ $antecedents->id }}">
+
+              <div class="modal-body">
+                <div class="row">
+                    <div class="mb-3">
+                        <label class="form-label" for="patient">Patient</label>
+                        <select class="form-control" id="patient" name="patient">
+                            @foreach($resources as $resource)
+                                @if($resource->id == $antecedents->resource_id)
+                                    <option value="{{ $resource->id }}" selected>{{ $resource->nom_prenom }}</option>
+                                @elseif ($resource->role == 'patient')
+                                    <option value="{{ $resource->id }}">{{ $resource->nom_prenom }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label" for="type">Type</label>
+                      <select class="form-control" name="type_antecedent" id="type">
+                        <option value="{{ $antecedents->type }}">{{ $antecedents->type }}</option>
+                        @if ($antecedents->type == 'medicaux')
+                        <option value="chirurgicaux">Chirurgicaux</option>
+                        <option value="familiaux">Familiaux</option>
+                        <option value="autres">Autres...</option>
+                        @endif
+                        @if ($antecedents->type == 'chirurgicaux')
+                        <option value="medicaux">Medicaux</option>
+                        <option value="familiaux">Familiaux</option>
+                        <option value="autres">Autres...</option>
+                        @endif
+                        @if ($antecedents->type == 'familiaux')
+                        <option value="medicaux">Medicaux</option>
+                        <option value="chirurgicaux">Chirurgicaux</option>
+                        <option value="autres">Autres...</option>
+                        @endif
+                        @if ($antecedents->type == 'autres')
+                        <option value="medicaux">Medicaux</option>
+                        <option value="chirurgicaux">Chirurgicaux</option>
+                        <option value="familiaux">Familiaux</option>
+                        @endif
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label" for="description">Description</label>
+                      <textarea class="form-control" name="description_antecedent" id="description">{{ $antecedents->description }}</textarea>
+                    </div>
+                </div>
+              <div class="modal-footer">
+                    <a href="/listeantecedents" class="btn btn-secondary">Annuler</a>
+                    <button type="submit" class="btn btn-primary">Modifier</button>
+              </div>
+            </form>
+        </div>
+    </div>
+  </div>
+
+</div>
+  @endsection

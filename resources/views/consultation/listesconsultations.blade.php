@@ -1,0 +1,160 @@
+@extends('layouts.app')
+      
+@section('title')
+    Listes consultations
+@endsection
+
+@section('content')
+<div class="container-fluid py-5">
+
+  <div class="tabs">
+    <div class="tab-item active">Consultations</div>
+  </div>
+  
+  <div class="tab-content">
+    <div class="tab-pane active">
+      <div class="row align-items-center">
+        <div class="col-10 col-md-10">
+            <div class="input-group p-1">
+                <div class="form-outline" data-mdb-input-init>
+                    <input type="search" id="form1" class="form-control" placeholder="search" />
+                </div>
+                <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-2 col-md-2">
+          <button type="button" data-toggle="modal" data-target="#myModal" class="bg-primary bordure">
+              <i class="fas fa-user-plus mr-2"></i>Ajouter une consultation
+          </button>
+        </div>
+      </div>
+        <!-- Modal pour ajouter un patient -->
+      <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter une consultation</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                        <!-- Formulaire de remplissage -->
+                      <form action="/ajouter/consultation" method="POST">
+                        @csrf
+                      
+                        @foreach ($errors->all() as $error)
+                          <h5 class="alert alert-danger"> {{ $error }} </h5>
+                        @endforeach
+                <div class="modal-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="mb-3">
+                          <label class="form-label" for="patient">Patient</label>
+                          <select class="form-control" id="patient" name="patient">
+                            <option value="">Sélectionnez le patient</option>
+                      @foreach($patients as $patient)
+                            <option value="{{ $patient->id }}">{{ $patient->nom_prenom }}</option>
+                      @endforeach
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="motif">Motif</label>
+                            <textarea class="form-control" id="motif" name="motif"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="cout">Coût</label>
+                            <select id="cout" name="cout" class="form-control">
+                              <option value="1500">1500</option>
+                              <option value="2000">2000</option>
+                              <option value="2500">2500</option>
+                              <option value="3000">3000</option>
+                              <option value="3500">3500</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="mb-3">
+                          <label class="form-label" for="type">type</label>
+                          <select class="form-control" id="type" name="type">
+                            <option value="">Sélectionnez le type de consultation</option>
+                            <option value="pediatrique">Pédiatrique</option>
+                            <option value="gynecologue">gynécologique</option>
+                            <option value="anesthesie">anesthésie</option>
+                            <option value="psychiatrique">psychiatrique</option>
+                            <option value="autres">Autres...</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="symptome">Symptome</label>
+                            <textarea class="form-control" id="symptome" name="symptome"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="diagnostic">Diagnostic</label>
+                            <textarea class="form-control" id="diagnostic" name="diagnostic"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+                  </form>
+            </div>
+        </div>
+    </div> 
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="bg-primary text-white">
+            <tr>
+              <th scope="col">NomPatient</th>
+              @if(session('role') == 'admin')
+              <th scope="col">NomMedecin</th>
+              @endif
+              <th scope="col">Motif</th>
+              <th scope="col">Coût</th>
+              <th scope="col">Type</th>
+              <th scope="col">Symptome</th>
+              <th scope="col">Diagnostic</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($consulters as $consulter)
+              <tr class="table-row" onclick="window.location.href='/vue-consultations/{{ $consulter->patient_id }}'">
+                <td>
+                  @foreach($patients as $patient)
+                    @if($consulter->patient_id == $patient->id)
+                      {{ $patient->nom_prenom }}
+                    @endif
+                  @endforeach
+                </td>
+                @if(session('role') == 'admin')
+                <td>
+                  @foreach($medecins as $medecin)
+                    @if($consulter->medecin_id == $medecin->id)
+                      {{ $medecin->nom_prenom }}
+                    @endif
+                  @endforeach
+                </td>
+                @endif
+                <td>{{ $consulter->motif}}</td>
+                <td>{{ $consulter->cout}}</td>
+                <td>{{ $consulter->type}}</td>
+                <td>{{ $consulter->symptome}}</td>
+                <td>{{ $consulter->diagnostic}}</td>
+                <td>
+                      <a href="/update-consultations/{{ $consulter->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>
+                      @if(session('role') == 'admin' || session('role') == 'medecin') 
+                      <a href="/delete-consultations/{{ $consulter->id }}" class="btn btn-danger btn-sm" style="line-height: 1;"><i class="fas fa-trash"></i></a>
+                      @endif
+                </td>
+              </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+  @endsection

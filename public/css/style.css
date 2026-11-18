@@ -1,0 +1,125 @@
+@media print {
+  .table-responsive {
+      overflow: visible !important;
+  }
+
+  .table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+  }
+
+  .table th,
+  .table td {
+      border: 1px solid #dee2e6 !important;
+  }
+
+  .table thead th {
+      border-bottom-width: 2px !important;
+  }
+
+  .d-print-none, #print-btn, .annuler {
+      display: none !important;
+  }
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-logo {
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+
+.event-title {
+  font-size: 14px; /* Ajustez la taille de police selon vos préférences */
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  position: relative;
+}
+
+.tab-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #007bff;
+}
+
+.tab-content {
+  padding: 20px;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+
+
+
+
+body {
+    margin: 0; /* Supprimer les marges par défaut du body */
+    padding: 0; /* Supprimer les paddings par défaut du body */
+  }
+  
+  .main-content {
+    margin: 20px; /* Ajouter des marges au container principal */
+  }
+  
+  .container-fluid.py-5 {
+    background-color: #fff;
+    padding-top: 1rem !important;
+    padding-bottom: 2rem !important;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .container-fluid {
+    padding:  10px;
+  }
+
+  .row.align-items-center {
+    background-color: #e4e7e7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  
+  .btn-primary {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .bordure{
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+  }
+  
+  .fas.fa-user-plus {
+    margin-right: 0.5rem;
+  }
