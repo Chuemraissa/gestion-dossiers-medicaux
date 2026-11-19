@@ -2,18 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 
 class LocalizationController extends Controller
 {
-    public function setLocale($lang){
-        if(in_array($lang,['fr','en','all','esp','chin'])){
+    /**
+     * Langues disponibles : un dossier dans lang/ = une langue.
+     * Pour ajouter une langue, il suffit d'ajouter son dossier (avec messages.php).
+     * Retourne [code => nom affiché], ex. ['fr' => 'Français'].
+     */
+    public static function langues(): array
+    {
+        $langues = [];
 
-            App::setLocale($lang);
-            Session::put("locale",$lang);
+        foreach (File::directories(lang_path()) as $dossier) {
+            $code = basename($dossier);
+            $langues[$code] = trans('messages.nom_langue', [], $code);
         }
-            return back();
+
+        return $langues;
+    }
+
+    public function setLocale($lang)
+    {
+        if (array_key_exists($lang, self::langues())) {
+            App::setLocale($lang);
+            Session::put('locale', $lang);
+        }
+
+        return back();
     }
 }

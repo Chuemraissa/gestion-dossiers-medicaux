@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    update
+    @lang('messages.modif')
 @endsection
 
 @section('content')
@@ -51,7 +51,7 @@
                 <option value="{{ $ordonnancesAll->examen->id }}">{{ $ordonnancesAll->examen->type }}</option>
                 @foreach($examens as $examen)
                 @if ($ordonnancesAll->examen->type != $examen->type)
-                <option value="{{ $examen->id }}">{{ $examen->type }}</option>
+                <option value="{{ $examen->id }}">{{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}</option>
                 @endif
                 @endforeach
                 </select>

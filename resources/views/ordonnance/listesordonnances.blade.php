@@ -1,17 +1,21 @@
 @extends('layouts.app')
       
 @section('title')
-    listes
+    @lang('messages.ordonnance')
 @endsection
 
 @section('content')
 <div class="container-fluid py-5">
 
   <ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item"><a class="nav-link {{ request()->is('listesordonnances') ? 'active': null }}" href="{{ url('listesordonnances') }}" role="tab">Ordonnances</a></li>
-    <li class="nav-item"><a class="nav-link {{ request()->is('listesexamens') ? 'active': null }}" href="{{ url('listesexamens') }}" role="tab">Examens</a></li>
+    @if(auth()->user()?->aAcces('ordonnances'))
+    <li class="nav-item"><a class="nav-link {{ request()->is('listesordonnances') ? 'active': null }}" href="{{ url('listesordonnances') }}" role="tab">@lang('messages.ordonnance')</a></li>
+    @endif
+    @if(auth()->user()?->aAcces('examens'))
+    <li class="nav-item"><a class="nav-link {{ request()->is('listesexamens') ? 'active': null }}" href="{{ url('listesexamens') }}" role="tab">@lang('messages.examens')</a></li>
+    @endif
     @if(auth()->user()?->aAcces('rendez_vous')) 
-    <li class="nav-item"><a class="nav-link {{ request()->is('listesRDV') ? 'active': null }}" href="{{ url('listesRDV') }}" role="tab">Rendez-vous</a></li>
+    <li class="nav-item"><a class="nav-link {{ request()->is('listesRDV') ? 'active': null }}" href="{{ url('listesRDV') }}" role="tab">@lang('messages.rendez-vous')</a></li>
     @endif
     </ul>
 
@@ -75,7 +79,7 @@
                         <select class="form-control" id="examen" name="examen">
                         <option value="">Selectionnez un examen</option>
                         @foreach($examens as $examen)
-                          <option value="{{ $examen->id }}">{{ $examen->type }}</option>
+                          <option value="{{ $examen->id }}">{{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}</option>
                         @endforeach
                         </select>
                       </div>
@@ -177,7 +181,7 @@
         <div class="col-10 col-md-10">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search" />
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')" />
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -213,11 +217,7 @@
                           <label class="form-label" for="type">Type</label>
                           <select class="form-control" id="type" name="type_examen">
                             <option value="">Sélectionnez le type</option>
-                            <option value="biopsies">Biopsies</option>
-                            <option value="neurophysiologiques">neurophysiologiques</option>
-                            <option value="echographie">Échographie</option>
-                            <option value="bacteriologique">bacteriologique</option>
-                            <option value="autres">Autres...</option>
+                            <x-options-liste liste="types_examen" :selection="old('type_examen')" />
                           </select>
                       </div>
                       <div class="mb-3">
@@ -252,7 +252,7 @@
           <tbody>
             @foreach($examens as $examen)
             <tr class="table-row">
-              <td>{{ $examen->type }}</td>
+              <td>{{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}</td>
               <td>{{ $examen->description }}</td>
               <td>{{ $examen->cout }}</td>
               @if(auth()->user()?->aAcces('examens_gestion')) 
@@ -275,7 +275,7 @@
         <div class="col-10 col-md-10">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search" />
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')" />
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -288,11 +288,6 @@
           </button>
         </div>
       </div>
-          <h5 style="color:blue;">
-            @if (session('status'))
-              {{ session('status') }}
-            @endif
-          </h5>
       <!-- Modal pour ajouter une categorie -->
         <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" id="myModalRdv" tabindex="-1" aria-labelledby="exampleModalLabelRdv">
             <div class="modal-dialog">
@@ -334,10 +329,7 @@
                                 <label class="form-label" for="statut">Statut</label>
                                 <select name="statut" id="statut" class="form-control">
                                   <option value="">Selectionner un statut</option>
-                                  <option value="confirme">Confirmé</option>
-                                  <option value="annule">Annulé</option>
-                                  <option value="en_attente">En attente</option>
-                                  <option value="traite">Traité</option>
+                                  <x-options-liste liste="statuts_rdv" :selection="old('statut')" />
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -391,7 +383,7 @@
                   @endif
                 <td>{{ $rdv->date }}</td>
                 <td>{{ $rdv->heure }}</td>
-                <td>{{ $rdv->statut }}</td>
+                <td>{{ \App\Models\ElementListe::libelle('statuts_rdv', $rdv->statut) }}</td>
                 <td>{{ $rdv->motif }}</td>
                 <td>
                   <a href="/update-RDV/{{ $rdv->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>

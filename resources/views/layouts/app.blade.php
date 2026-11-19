@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/apple-icon.png') }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
     
     <title>@yield('title')</title>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js"></script>
 
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
@@ -20,7 +20,7 @@
     <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" />
 
     <!-- Font Awesome Icons -->
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -28,12 +28,11 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('css/material-dashboard.css?v=3.1.0') }}" rel="stylesheet" />
 
-    <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
     <link rel="stylesheet" href="{{ asset('bootstrap-icons/bootstrap-icons.css') }}">
   </head>
 
 
-<body class="g-sidenav-show  bg-gray-100">  
+<body class="g-sidenav-show  bg-gray-100" data-confirmer-suppression="@lang('messages.confirmer_suppression')">  
     @if(auth()->user()?->aAcces('tableau_de_bord')) 
     <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
 
@@ -190,14 +189,12 @@
                     <nav aria-label="breadcrumb" class="mx-auto">
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Lang
+                                @lang('messages.langue')
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="/locale/fr">Français</a>
-                                <a class="dropdown-item" href="/locale/en">English</a>
-                                <a class="dropdown-item" href="/locale/all">Allemand</a>
-                                <a class="dropdown-item" href="/locale/esp">Espagnol</a>
-                                <a class="dropdown-item" href="/locale/chin">Chinois</a>
+                                @foreach (\App\Http\Controllers\LocalizationController::langues() as $code => $nom)
+                                <a class="dropdown-item {{ app()->getLocale() === $code ? 'active' : '' }}" href="/locale/{{ $code }}">{{ $nom }}</a>
+                                @endforeach
                             </div>
                         </div>
                     </nav>
@@ -211,6 +208,23 @@
             </div>
         </nav>
         <!-- End Navbar -->
+
+        {{-- Messages pour toutes les pages : action réussie, ou erreurs d'un formulaire --}}
+        <div class="container-fluid">
+            @if (session('status'))
+                <div class="alert alert-info mt-3 mb-0">{{ session('status') }}</div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger mt-3 mb-0">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $erreur)
+                            <li>{{ $erreur }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div>
+
         @yield('content')
     </main>
     
@@ -233,28 +247,14 @@
             </div>
         </div>
     </div> -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="{{ asset('js/script.js') }}"></script>
-    <script>
-        var win = navigator.platform.indexOf('Win') > -1;
-        if (win && document.querySelector('#sidenav-scrollbar')) {
-            var options = {
-            damping: '0.5'
-            }
-            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-        }
-    </script>
-
-    <!-- Github buttons -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <!-- Inclure le fichier CSS Bootstrap -->
+    <!-- Bootstrap 4 (fenêtres modales, onglets, menus déroulants) : jQuery doit être chargé en premier -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-    <!-- Inclure le fichier JavaScript Bootstrap (jQuery requis) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- Scripts de l'application : recherche dans les tableaux, confirmation des suppressions -->
+    <script src="{{ asset('js/script.js') }}"></script>
 </body>
 
 </html>

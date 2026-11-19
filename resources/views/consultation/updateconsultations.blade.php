@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    update
+    @lang('messages.modif')
 @endsection
 
 @section('content')
@@ -45,49 +45,7 @@
             <div class="mb-3">
                 <label class="form-label" for="cout">Coût</label>
                 <select class="form-control"  id="cout" name="cout">
-                    <option value="{{ $consulters->cout }}">{{ $consulters->cout }}</option>
-                    @if ($consulters->cout == '1000')
-                    <option value="1500">1500</option>
-                    <option value="2000">2000</option>
-                    <option value="2500">2500</option>
-                    <option value="3000">3000</option>
-                    <option value="3500">3500</option>
-                    @endif
-                    @if ($consulters->cout == '1500')
-                    <option value="1000">1000</option>
-                    <option value="2000">2000</option>
-                    <option value="2500">2500</option>
-                    <option value="3000">3000</option>
-                    <option value="3500">3500</option>
-                    @endif
-                    @if ($consulters->cout == '2000')
-                    <option value="1000">1000</option>
-                    <option value="1500">Pédiatrique</option>
-                    <option value="2500">2500</option>
-                    <option value="3000">3000</option>
-                    <option value="3500">3500</option>
-                    @endif
-                    @if ($consulters->cout == '2500')
-                    <option value="1000">1000</option>
-                    <option value="1500">1500</option>
-                    <option value="2000">2000</option>
-                    <option value="3000">3000</option>
-                    <option value="3500">3500</option>
-                    @endif
-                    @if ($consulters->cout == '3000')
-                    <option value="1000">1000</option>
-                    <option value="1500">1500</option>
-                    <option value="2000">2000</option>
-                    <option value="2500">2500</option>
-                    <option value="3500">3500</option>
-                    @endif
-                    @if ($consulters->cout == '3500')
-                    <option value="1000">1000</option>
-                    <option value="1500">1500</option>
-                    <option value="2000">2000</option>
-                    <option value="2500">2500</option>
-                    <option value="3000">3000</option>
-                    @endif
+                    <x-options-liste liste="tarifs_consultation" :selection="$consulters->cout" />
                 </select>
             </div>
             </div>
@@ -95,37 +53,7 @@
             <div class="mb-3">
                 <label class="form-label" for="type">type</label>
                 <select class="form-control" id="type" name="type">
-                <option value="{{ $consulters->type }}">{{ $consulters->type }}</option>
-                @if ($consulters->type == 'pediatrique')
-                <option value="gynecologue">gynécologique</option>
-                <option value="anesthesie">anesthésie</option>
-                <option value="psychiatrique">psychiatrique</option>
-                <option value="autres">Autres...</option>
-                @endif
-                @if ($consulters->type == 'gynecologue')
-                <option value="pediatrique">Pédiatrique</option>
-                <option value="anesthesie">anesthésie</option>
-                <option value="psychiatrique">psychiatrique</option>
-                <option value="autres">Autres...</option>
-                @endif
-                @if ($consulters->type == 'anesthesie')
-                <option value="pediatrique">Pédiatrique</option>
-                <option value="gynecologue">gynécologique</option>
-                <option value="psychiatrique">psychiatrique</option>
-                <option value="autres">Autres...</option>
-                @endif
-                @if ($consulters->type == 'psychiatrique')
-                <option value="pediatrique">Pédiatrique</option>
-                <option value="gynecologue">gynécologique</option>
-                <option value="anesthesie">anesthésie</option>
-                <option value="autres">Autres...</option>
-                @endif
-                @if ($consulters->type == 'autres')
-                <option value="pediatrique">Pédiatrique</option>
-                <option value="gynecologue">gynécologique</option>
-                <option value="anesthesie">anesthésie</option>
-                <option value="psychiatrique">psychiatrique</option>
-                @endif
+                <x-options-liste liste="types_consultation" :selection="$consulters->type" />
                 </select>
             </div>
             <div class="mb-3">

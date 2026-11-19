@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Models\ElementListe;
 use App\Models\Consulter;
 use App\Models\Resource;
 use App\Models\Ordonnance;
@@ -26,7 +28,7 @@ class ConsultationsController extends Controller
     {
         $request->validate([
             'motif' => 'required',
-            'type' => 'required',
+            'type' => ['required', Rule::in(ElementListe::valeurs('types_consultation'))],
             'symptome' => 'required',
             'diagnostic' => 'required',
             'patient' => 'required|exists:resources,id',

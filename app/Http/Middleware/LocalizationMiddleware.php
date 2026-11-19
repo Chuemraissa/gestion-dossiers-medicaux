@@ -17,10 +17,15 @@ class LocalizationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Langue choisie par l'utilisateur, sinon la langue par défaut du .env (APP_LOCALE)
+        $locale = Session::get('locale');
 
-        $locale=Session::get("locale") ?? 'en' ;
-            Session::put("locale",$locale);
-            App::setLocale($locale);
+        // Langue inconnue (dossier absent dans lang/) : on revient à la langue par défaut
+        if (! $locale || ! is_dir(lang_path($locale))) {
+            $locale = config('app.locale');
+        }
+
+        App::setLocale($locale);
 
         return $next($request);
     }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Listes Resources
+    @lang('messages.resources')
 @endsection
 
 @section('content')
@@ -23,7 +23,7 @@
         <div class="col-10 col-md-10">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search"/>
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')"/>
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -36,11 +36,6 @@
           </button>
         </div>
       </div>
-          <h5 style="color:blue;">
-            @if (session('status'))
-              {{ session('status') }}
-            @endif
-          </h5>
 
       <!-- Modal pour ajouter un membre du personnel -->
       <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" id="myModalPersonnel" aria-labelledby="titreModalPersonnel">

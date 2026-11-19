@@ -23,7 +23,10 @@ class UtilisateursController extends Controller
         }
 
         $patientCount = Resource::patients()->count();
-        $medecinCount = Resource::medecins()->count();
+        // Médecins : comptes qui prescrivent, sans compter les administrateurs
+        $medecinCount = Resource::medecins()
+            ->whereNotIn('role', Role::codesAvecAcces('gestion_personnel'))
+            ->count();
         $rdvCount = Rendez_vous::count();
         $consulterCount = Consulter::count();
         $medCount = Medicament::count();

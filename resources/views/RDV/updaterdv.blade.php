@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    update
+    @lang('messages.modif')
 @endsection
 
 @section('content')
@@ -51,27 +51,7 @@
                     <div class="mb-3">
                         <label class="form-label" for="statut">Statut</label>
                         <select name="statut" id="statut" class="form-control">
-                            <option value="{{ $rdv->statut }}">{{ $rdv->statut }}</option>
-                            @if ($rdv->statut == 'confirme')
-                            <option value="annule">Annulé</option>
-                            <option value="en_attente">En attente</option>
-                            <option value="traite">Traité</option>
-                            @endif
-                            @if ($rdv->statut == 'annule')
-                            <option value="confirme">Confirmé</option>
-                            <option value="en_attente">En attente</option>
-                            <option value="traite">Traité</option>
-                            @endif
-                            @if ($rdv->statut == 'en_attente')
-                            <option value="confirme">Confirmé</option>
-                            <option value="annule">Annulé</option>
-                            <option value="traite">Traité</option>
-                            @endif
-                            @if ($rdv->statut == 'traite')
-                            <option value="confirme">Confirmé</option>
-                            <option value="annule">Annulé</option>
-                            <option value="en_attente">En attente</option>
-                            @endif
+                            <x-options-liste liste="statuts_rdv" :selection="$rdv->statut" />
                         </select>
                     </div>
                     <div class="mb-3">

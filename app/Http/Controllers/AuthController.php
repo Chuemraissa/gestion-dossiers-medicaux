@@ -30,7 +30,8 @@ class AuthController extends Controller
             ])->onlyInput('email');
         }
 
-        Auth::login($user);
+        // Case « Se souvenir de moi » : la connexion est gardée même après fermeture du navigateur
+        Auth::login($user, $request->boolean('remember'));
         $request->session()->regenerate();
 
         // Informations utilisées par les vues

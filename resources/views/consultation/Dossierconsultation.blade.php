@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    Dossier
+    @lang('messages.consultation')
 @endsection
 
 @section('content')
@@ -64,7 +64,7 @@
               <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Taille:</strong> &nbsp; {{ $param->taille }} m</li>
               <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Temperature:</strong> &nbsp; {{ $param->temperature }} °c</li>
               <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Pression arterielle:</strong> &nbsp; {{ $param->pression_arterielle }} mmHg</li>
-              <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Groupe sanguin:</strong> &nbsp; {{ $param->groupe_sanguin }}</li>
+              <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Groupe sanguin:</strong> &nbsp; {{ \App\Models\ElementListe::libelle('groupes_sanguins', $param->groupe_sanguin) }}</li>
             </ul>
           </div>
           @endforeach
@@ -80,7 +80,7 @@
           @foreach($antecedents as $antecedent)
           <div class="card-body p-3">
             <ul class="list-group">
-                <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ $antecedent->type }}</li>
+                <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ \App\Models\ElementListe::libelle('types_antecedent', $antecedent->type) }}</li>
                 <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Description:</strong> &nbsp; {{ $antecedent->description }}</li>
             </ul>
           </div>
@@ -101,7 +101,7 @@
             <ul class="list-group">
               <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Date& Heure:</strong> &nbsp; {{ $consultation->updated_at }} </li>
               <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Motif:</strong> &nbsp; {{ $consultation->motif }}</li>
-              <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ $consultation->type }}</li>
+              <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ \App\Models\ElementListe::libelle('types_consultation', $consultation->type) }}</li>
               <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Symptome:</strong> &nbsp; {{ $consultation->symptome }}</li>
               <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Diagnostic:</strong> &nbsp; {{ $consultation->diagnostic }}</li>
               <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Prix:</strong> &nbsp; {{ $consultation->cout }}</li>
@@ -123,7 +123,7 @@
           <div class="card-body p-3">
             <ul class="list-group">
                 <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Date & Heure:</strong> &nbsp; {{ $effectuer->updated_at }}</li>
-                <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Type d'examen:</strong> &nbsp; {{ $examen->type }}</li>
+                <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Type d'examen:</strong> &nbsp; {{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}</li>
                 <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Prix d'examen:</strong> &nbsp; {{ $examen->cout }}</li>
                 <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Description de l'examen:</strong> &nbsp; {{ $examen->description }}</li>
                 <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Resultat:</strong> &nbsp; {{ $effectuer->resultat }}</li> 

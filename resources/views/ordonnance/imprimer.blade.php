@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Imprimer
+    @lang('messages.imprimer')
 @endsection
 
 @section('content')
@@ -34,7 +34,7 @@
             <div class="card-body p-3">
                 <ul class="list-group">
                     <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Date & heure:</strong> &nbsp; {{ $effectuer->updated_at }}</li>
-                    <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Type d'examen:</strong> &nbsp; {{ $examen->type }}</li>
+                    <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Type d'examen:</strong> &nbsp; {{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}</li>
                     <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Description de l'examen:</strong> &nbsp; {{ $examen->description }}</li>
                     <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Resultat:</strong> &nbsp; {{ $effectuer->resultat }}</li>
                 </ul>

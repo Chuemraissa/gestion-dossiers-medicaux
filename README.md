@@ -24,6 +24,17 @@ Par défaut :
 | Chargé d'accueil | Patients |
 | Patient | Son propre dossier médical uniquement |
 
+## Listes de choix
+
+Les listes des formulaires (statuts de rendez-vous, types d'examen, de consultation et d'antécédent,
+groupes sanguins, tarifs de consultation) sont dans la table `listes`.
+Valeurs de départ : `database/seeders/ListeSeeder.php`, chargées par `php artisan db:seed`.
+
+## Langues
+
+Une langue = un dossier dans `lang/` (avec `messages.php`). Le menu « Langue » les affiche automatiquement.
+Langue par défaut : `APP_LOCALE` dans `.env`.
+
 ## Prérequis
 
 - PHP 8.2 ou plus

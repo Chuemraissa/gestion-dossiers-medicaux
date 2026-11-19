@@ -1,7 +1,7 @@
 @extends('layouts.app')
             
 @section('title')
-    acceuil
+    @lang('messages.acceuil')
 @endsection
 
 @section('content')

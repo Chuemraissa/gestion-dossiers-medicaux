@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    update
+    @lang('messages.modif')
 @endsection
 
 @section('content')
@@ -54,28 +54,7 @@
                     <div class="mb-3">
                       <label class="form-label" for="gs">GS</label>
                       <select class="form-control" name="groupe_sanguin" id="gs">
-                        <option value="{{ $params->groupe_sanguin }}">{{ $params->groupe_sanguin }}</option>
-                        @if ($params->groupe_sanguin == 'O')
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="AB">AB</option>
-                        @endif
-                        @if ($params->groupe_sanguin == 'A')
-                        <option value="O">O</option>
-                        <option value="B">B</option>
-                        <option value="AB">AB</option>
-                        @endif
-                        @if ($params->groupe_sanguin == 'B')
-                        <option value="O">O</option>
-                        <option value="A">A</option>
-                        <option value="AB">AB</option>
-                        @endif
-                        @if ($params->groupe_sanguin == 'AB')
-                        <option value="O">O</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="AB">AB</option>
-                        @endif
+                        <x-options-liste liste="groupes_sanguins" :selection="$params->groupe_sanguin" />
                       </select>
                     </div>
                     <div class="mb-3">

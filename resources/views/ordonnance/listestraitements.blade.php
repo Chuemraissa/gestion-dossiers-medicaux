@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    Listes ordonnances
+    @lang('messages.examens')
 @endsection
 
 @section('content')
@@ -9,12 +9,12 @@
 
   <ul class="nav nav-tabs" role="tablist">
     @if(auth()->user()?->aAcces('examens')) 
-    <li class="nav-item"><a class="nav-link {{ request()->is('listestraitements') ? 'active': null }}" href="{{ url('listestraitements') }}" role="tab">Traitements</a></li>
+    <li class="nav-item"><a class="nav-link {{ request()->is('listestraitements') ? 'active': null }}" href="{{ url('listestraitements') }}" role="tab">@lang('messages.traitements')</a></li>
     @endif
-    <li class="nav-item"><a class="nav-link {{ request()->is('listemedicaments') ? 'active': null }}" href="{{ url('listemedicaments') }}" role="tab">Medicaments</a></li>
+    <li class="nav-item"><a class="nav-link {{ request()->is('listemedicaments') ? 'active': null }}" href="{{ url('listemedicaments') }}" role="tab">@lang('messages.medicaments')</a></li>
     @if(auth()->user()?->aAcces('medicaments')) 
-    <li class="nav-item"><a class="nav-link {{ request()->is('listecategories') ? 'active': null }}" href="{{ url('listecategories') }}" role="tab">Categories</a></li>
-    <li class="nav-item"><a class="nav-link {{ request()->is('listeposologies') ? 'active': null }}" href="{{ url('listeposologies') }}" role="tab">posologie</a></li>
+    <li class="nav-item"><a class="nav-link {{ request()->is('listecategories') ? 'active': null }}" href="{{ url('listecategories') }}" role="tab">@lang('messages.categories')</a></li>
+    <li class="nav-item"><a class="nav-link {{ request()->is('listeposologies') ? 'active': null }}" href="{{ url('listeposologies') }}" role="tab">@lang('messages.posologies')</a></li>
     @endif
   </ul>
   
@@ -26,7 +26,7 @@
         <div class="col-10 col-md-10">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search" />
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')" />
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -72,7 +72,7 @@
                             <select class="form-control" id="examen" name="type">
                             <option value="">Selectionnez un type</option>
                             @foreach($examens as $examen)
-                              <option value="{{ $examen->id }}">{{ $examen->type }}</option>
+                              <option value="{{ $examen->id }}">{{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}</option>
                             @endforeach
                             </select>
                         </div>
@@ -127,7 +127,7 @@
               <td>
                 @foreach($examens as $examen)
                 @if($effectuer->examen_id == $examen->id)
-                  {{ $examen->type }}
+                  {{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}
                 @endif
                 @endforeach
               </td>
@@ -153,7 +153,7 @@
         <div class="col-10 col-md-10">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search"/>
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')"/>
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -254,7 +254,7 @@
         <div class="col-10 col-md-10">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search"/>
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')"/>
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -332,7 +332,7 @@
         <div class="col-10 col-md-10">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search"/>
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')"/>
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>

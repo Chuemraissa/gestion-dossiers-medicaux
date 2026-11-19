@@ -36,6 +36,7 @@ class Resource extends Model implements AuthenticatableContract
     // Le mot de passe (chiffré) n'est jamais renvoyé quand le modèle est converti en tableau/JSON
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     /**

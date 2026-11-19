@@ -56,4 +56,12 @@ return [
     'medecin' => '医生',
     'connecte' => '当前登录用户:',
     'deconnect' => '注销',
+    // Nom de la langue, affiché dans le menu des langues
+    'nom_langue' => '中文',
+    'langue' => '语言',
+    'recherche' => '搜索',
+    'confirmer_suppression' => '您确定要删除此项吗？',
+    'traitements' => '检查结果',
+    'categories' => '类别',
+    'posologies' => '剂量',
 ];

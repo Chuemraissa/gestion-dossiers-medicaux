@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    update
+    @lang('messages.modif')
 @endsection
 
 @section('content')

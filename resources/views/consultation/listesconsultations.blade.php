@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    Listes consultations
+    @lang('messages.consultation')
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
         <div class="col-10 col-md-10">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search" />
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')" />
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -64,11 +64,7 @@
                         <div class="mb-3">
                             <label class="form-label" for="cout">Coût</label>
                             <select id="cout" name="cout" class="form-control">
-                              <option value="1500">1500</option>
-                              <option value="2000">2000</option>
-                              <option value="2500">2500</option>
-                              <option value="3000">3000</option>
-                              <option value="3500">3500</option>
+                              <x-options-liste liste="tarifs_consultation" :selection="old('cout')" />
                             </select>
                         </div>
                       </div>
@@ -77,11 +73,7 @@
                           <label class="form-label" for="type">type</label>
                           <select class="form-control" id="type" name="type">
                             <option value="">Sélectionnez le type de consultation</option>
-                            <option value="pediatrique">Pédiatrique</option>
-                            <option value="gynecologue">gynécologique</option>
-                            <option value="anesthesie">anesthésie</option>
-                            <option value="psychiatrique">psychiatrique</option>
-                            <option value="autres">Autres...</option>
+                            <x-options-liste liste="types_consultation" :selection="old('type')" />
                           </select>
                         </div>
                         <div class="mb-3">
@@ -140,7 +132,7 @@
                 @endif
                 <td>{{ $consulter->motif}}</td>
                 <td>{{ $consulter->cout}}</td>
-                <td>{{ $consulter->type}}</td>
+                <td>{{ \App\Models\ElementListe::libelle('types_consultation', $consulter->type) }}</td>
                 <td>{{ $consulter->symptome}}</td>
                 <td>{{ $consulter->diagnostic}}</td>
                 <td>

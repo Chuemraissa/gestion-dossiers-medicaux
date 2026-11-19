@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Models\ElementListe;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
@@ -32,11 +34,20 @@ class RdvController extends Controller
 
     public function calendar()
     {
-        $appointments = Rendez_vous::all();
-        $patients = Resource::patients()->get();
-        $medecins = Resource::medecins()->get();
+        $patients = Resource::patients()->pluck('nom_prenom', 'id');
 
-        return view('planing.calendar', compact('appointments', 'patients', 'medecins'));
+        // Événements du calendrier, préparés ici puis transmis à la vue en JSON
+        $evenements = Rendez_vous::all()->map(fn ($rdv) => [
+            'title' => $patients[$rdv->patient_id] ?? '?',
+            'start' => $rdv->date.'T'.substr($rdv->heure, 0, 5),
+            'extendedProps' => [
+                'patient' => $patients[$rdv->patient_id] ?? '?',
+                'statut' => $rdv->statut,
+                'motif' => $rdv->motif,
+            ],
+        ])->values();
+
+        return view('planing.calendar', compact('evenements'));
     }
 
     public function ajout_RDV(Request $request)
@@ -44,7 +55,7 @@ class RdvController extends Controller
         $request->validate([
             'date' => 'required|date',
             'heure' => 'required',
-            'statut' => 'required',
+            'statut' => ['required', Rule::in(ElementListe::valeurs('statuts_rdv'))],
             'motif' => 'required',
             'patient' => 'required|exists:resources,id',
         ]);

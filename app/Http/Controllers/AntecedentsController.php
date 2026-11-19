@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Models\ElementListe;
 use App\Models\Antecedent;
 use App\Models\Resource;
 
@@ -19,7 +21,7 @@ class AntecedentsController extends Controller
     {
         $request->validate([
             'patient' => 'required|exists:resources,id',
-            'type_antecedent' => 'required',
+            'type_antecedent' => ['required', Rule::in(ElementListe::valeurs('types_antecedent'))],
             'description_antecedent' => 'required',
         ]);
         

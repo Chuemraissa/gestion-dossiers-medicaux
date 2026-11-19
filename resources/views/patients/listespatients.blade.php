@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Listes Patients
+    @lang('messages.listepatients')
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@
         <div class="col-md-8">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search"/>
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')"/>
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -38,11 +38,6 @@
           </button>
         </div>
       </div>
-          <h5 style="color:blue;">
-            @if (session('status'))
-              {{ session('status') }}
-            @endif
-          </h5>
       <!-- Modal pour ajouter un patient -->
       <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" id="myModalca" tabindex="-1" aria-labelledby="exampleModalLabelca">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -159,7 +154,7 @@
         <div class="col-10 col-md-10">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search" />
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')" />
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -172,11 +167,6 @@
           </button>
         </div>
       </div>
-          <h5 style="color:blue;">
-            @if (session('status'))
-              {{ session('status') }}
-            @endif
-          </h5>
       <!-- Modal pour ajouter un patient -->
       <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" id="myModalpa" tabindex="-1" aria-labelledby="exampleModalLabelpa">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -221,10 +211,7 @@
                       <label class="form-label" for="gs">GS</label>
                       <select class="form-control" name="groupe_sanguin" id="gs">
                         <option value="">@lang('messages.selectgs')</option>
-                        <option value="O">O</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="AB">AB</option>
+                        <x-options-liste liste="groupes_sanguins" :selection="old('groupe_sanguin')" />
                       </select>
                     </div>
                     <div class="mb-3">
@@ -296,7 +283,7 @@
         <div class="col-10 col-md-10">
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" placeholder="search" />
+                    <input type="search" id="form1" class="form-control" placeholder="@lang('messages.recherche')" />
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -309,11 +296,6 @@
           </button>
         </div>
       </div>
-          <h5 style="color:blue;">
-            @if (session('status'))
-              {{ session('status') }}
-            @endif
-          </h5>
       <!-- Modal pour ajouter un patient -->
       <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" id="myModalant" tabindex="-1" aria-labelledby="exampleModalLabelant">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -345,10 +327,7 @@
                       <label class="form-label" for="type">@lang('messages.type')</label>
                       <select class="form-control" name="type_antecedent" id="type">
                         <option value="">@lang('messages.selectantecedent')</option>
-                        <option value="medicaux">@lang('messages.medicaux')</option>
-                        <option value="chirurgicaux">@lang('messages.chirurgie')</option>
-                        <option value="familiaux">@lang('messages.familiaux')</option>
-                        <option value="autres">@lang('messages.autres')</option>
+                        <x-options-liste liste="types_antecedent" :selection="old('type_antecedent')" />
                       </select>
                     </div>
                     <div class="mb-3">
@@ -385,7 +364,7 @@
                   @endif
                 @endforeach
               </td>
-              <td>{{ $antecedent->type }}</td>
+              <td>{{ \App\Models\ElementListe::libelle('types_antecedent', $antecedent->type) }}</td>
               <td>{{ $antecedent->description }}</td>
               <td>
                 <a href="/update-antecedents/{{ $antecedent->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>

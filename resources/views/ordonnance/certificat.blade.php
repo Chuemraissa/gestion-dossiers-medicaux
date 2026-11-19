@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Imprimer
+    @lang('messages.imprimer')
 @endsection
 
 @section('content')

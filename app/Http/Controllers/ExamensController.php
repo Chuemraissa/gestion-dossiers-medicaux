@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Models\ElementListe;
 use App\Models\Examen;
 
 class ExamensController extends Controller
@@ -16,7 +18,7 @@ class ExamensController extends Controller
     public function ajout_examen(Request $request)
     {
         $request->validate([
-            'type_examen' => 'required',
+            'type_examen' => ['required', Rule::in(ElementListe::valeurs('types_examen'))],
             'description_examen' => 'required',
             'cout' => 'required|numeric|min:0',
         ]);

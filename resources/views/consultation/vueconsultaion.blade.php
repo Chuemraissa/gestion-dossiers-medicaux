@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    vue consultation
+    @lang('messages.consultation')
 @endsection
 
 @section('content')
@@ -48,7 +48,7 @@
           @foreach($antecedents as $antecedent)
           <div class="card-body p-3">
             <ul class="list-group">
-                <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ $antecedent->type }}</li>
+                <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ \App\Models\ElementListe::libelle('types_antecedent', $antecedent->type) }}</li>
                 <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Description:</strong> &nbsp; {{ $antecedent->description }}</li>
             </ul>
           </div>

@@ -56,4 +56,12 @@ return [
     'medecin' => 'Médico',
     'connecte' => 'Conectado como:',
     'deconnect' => 'Desconectar',
+    // Nom de la langue, affiché dans le menu des langues
+    'nom_langue' => 'Español',
+    'langue' => 'Idioma',
+    'recherche' => 'Buscar',
+    'confirmer_suppression' => '¿Realmente desea eliminar este elemento?',
+    'traitements' => 'Resultados de exámenes',
+    'categories' => 'Categorías',
+    'posologies' => 'Posologías',
 ];

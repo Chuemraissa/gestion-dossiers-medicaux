@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    update
+    @lang('messages.modif')
 @endsection
 
 @section('content')
@@ -39,27 +39,7 @@
                     <div class="mb-3">
                       <label class="form-label" for="type">Type</label>
                       <select class="form-control" name="type_antecedent" id="type">
-                        <option value="{{ $antecedents->type }}">{{ $antecedents->type }}</option>
-                        @if ($antecedents->type == 'medicaux')
-                        <option value="chirurgicaux">Chirurgicaux</option>
-                        <option value="familiaux">Familiaux</option>
-                        <option value="autres">Autres...</option>
-                        @endif
-                        @if ($antecedents->type == 'chirurgicaux')
-                        <option value="medicaux">Medicaux</option>
-                        <option value="familiaux">Familiaux</option>
-                        <option value="autres">Autres...</option>
-                        @endif
-                        @if ($antecedents->type == 'familiaux')
-                        <option value="medicaux">Medicaux</option>
-                        <option value="chirurgicaux">Chirurgicaux</option>
-                        <option value="autres">Autres...</option>
-                        @endif
-                        @if ($antecedents->type == 'autres')
-                        <option value="medicaux">Medicaux</option>
-                        <option value="chirurgicaux">Chirurgicaux</option>
-                        <option value="familiaux">Familiaux</option>
-                        @endif
+                        <x-options-liste liste="types_antecedent" :selection="$antecedents->type" />
                       </select>
                     </div>
                     <div class="mb-3">

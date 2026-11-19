@@ -56,4 +56,12 @@ return [
     'medecin' => 'Arzt',
     'connecte' => 'Angemeldet als:',
     'deconnect' => 'Abmelden',
+    // Nom de la langue, affiché dans le menu des langues
+    'nom_langue' => 'Deutsch',
+    'langue' => 'Sprache',
+    'recherche' => 'Suchen',
+    'confirmer_suppression' => 'Möchten Sie dieses Element wirklich löschen?',
+    'traitements' => 'Untersuchungsergebnisse',
+    'categories' => 'Kategorien',
+    'posologies' => 'Dosierungen',
 ];

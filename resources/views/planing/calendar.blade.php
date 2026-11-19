@@ -1,26 +1,28 @@
 @extends('layouts.app')
 
 @section('title')
-Agenda
+    @lang('messages.planing')
 @endsection
 
 @section('content')
+<div class="container-fluid py-5">
+    <div id="calendar"></div>
+</div>
 
-<div class="container-fluid py-5"> <div id='calendar'></div> 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, { initialView: 'dayGridMonth', locale: 'fr', events: [ 
-        @foreach ($appointments as $appointment) { 
-            title: '{{ $patients->where("id", $appointment->patient_id)->first()->nom_prenom }}', 
-            start: '{{ $appointment->date }}T{{ $appointment->heure }}', 
-            status: '{{ $appointment->statut }}', 
-            nom_prenom: '{{ $patients->where("id", $appointment->patient_id)->first()->nom_prenom }}', 
-            motif: '{{ $appointment->motif }}' 
-            }, 
-            @endforeach ], eventClick: function(info) { 
-                alert('Nom & Prénom: ' + info.event.extendedProps.nom_prenom + '\nStatut: ' + info.event.extendedProps.status + '\nMotif: ' + info.event.extendedProps.motif);
-                 } }); calendar.render(); 
+document.addEventListener('DOMContentLoaded', function () {
+    var calendrier = new FullCalendar.Calendar(document.getElementById('calendar'), {
+        initialView: 'dayGridMonth',
+        locale: @json(strtolower(str_replace('_', '-', app()->getLocale()))),
+        // Les rendez-vous sont préparés par RdvController::calendar()
+        events: @json($evenements),
+        eventClick: function (info) {
+            var p = info.event.extendedProps;
+            alert(p.patient + '\n' + p.statut + '\n' + p.motif);
+        }
     });
- </script>
+
+    calendrier.render();
+});
+</script>
 @endsection

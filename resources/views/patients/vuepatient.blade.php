@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
 @section('title')
-    Vue patient
+    @lang('messages.patients')
 @endsection
 
 @section('content')
@@ -53,7 +53,7 @@
               <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Taille:</strong> &nbsp; {{ $param->taille }} m</li>
               <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Temperature:</strong> &nbsp; {{ $param->temperature }} °c</li>
               <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Pression arterielle:</strong> &nbsp; {{ $param->pression_arterielle }} mmHg</li>
-              <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Groupe sanguin:</strong> &nbsp; {{ $param->groupe_sanguin }}</li>
+              <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Groupe sanguin:</strong> &nbsp; {{ \App\Models\ElementListe::libelle('groupes_sanguins', $param->groupe_sanguin) }}</li>
             </ul>
           </div>
           @endforeach
@@ -69,7 +69,7 @@
           @foreach($antecedents as $antecedent)
           <div class="card-body p-3">
             <ul class="list-group">
-                <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ $antecedent->type }}</li>
+                <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ \App\Models\ElementListe::libelle('types_antecedent', $antecedent->type) }}</li>
                 <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Description:</strong> &nbsp; {{ $antecedent->description }}</li>
             </ul>
           </div>

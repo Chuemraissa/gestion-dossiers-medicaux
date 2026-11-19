@@ -56,4 +56,12 @@ return [
     'medecin' => 'Doctor',
     'connecte' => 'Connected:',
     'deconnect' => 'Disconnected',
+    // Nom de la langue, affiché dans le menu des langues
+    'nom_langue' => 'English',
+    'langue' => 'Language',
+    'recherche' => 'Search',
+    'confirmer_suppression' => 'Do you really want to delete this item?',
+    'traitements' => 'Exam results',
+    'categories' => 'Categories',
+    'posologies' => 'Dosages',
 ];

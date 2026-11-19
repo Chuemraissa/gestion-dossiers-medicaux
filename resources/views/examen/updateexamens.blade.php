@@ -1,7 +1,7 @@
     @extends('layouts.app')
       
       @section('title')
-          update
+    @lang('messages.modif')
       @endsection
       
       @section('content')
@@ -27,37 +27,7 @@
                         <div class="mb-3">
                             <label class="form-label" for="type">Type</label>
                             <select class="form-control" id="type" name="type_examen">
-                              <option value="{{ $examens->type }}">{{ $examens->type }}</option>
-                            @if ($examens->type == 'biopsies')
-                              <option value="neurophysiologiques">neurophysiologiques</option>
-                              <option value="echographie">Échographie</option>
-                              <option value="bacteriologique">bacteriologique</option>
-                              <option value="autres">Autres...</option>
-                              @endif
-                            @if ($examens->type == 'neurophysiologiques')
-                              <option value="biopsies">Biopsies</option>
-                              <option value="echographie">Échographie</option>
-                              <option value="bacteriologique">bacteriologique</option>
-                              <option value="autres">Autres...</option>
-                              @endif
-                            @if ($examens->type == 'echographie')
-                              <option value="biopsies">Biopsies</option>
-                              <option value="neurophysiologiques">neurophysiologiques</option>
-                              <option value="bacteriologique">bacteriologique</option>
-                              <option value="autres">Autres...</option>
-                              @endif
-                            @if ($examens->type == 'bacteriologique')
-                              <option value="biopsies">Biopsies</option>
-                              <option value="neurophysiologiques">neurophysiologiques</option>
-                              <option value="echographie">Échographie</option>
-                              <option value="autres">Autres...</option>
-                              @endif
-                            @if ($examens->type == 'autres')
-                              <option value="biopsies">Biopsies</option>
-                              <option value="neurophysiologiques">neurophysiologiques</option>
-                              <option value="echographie">Échographie</option>
-                              <option value="bacteriologique">bacteriologique</option>
-                              @endif
+                              <x-options-liste liste="types_examen" :selection="$examens->type" />
                             </select>
                         </div>
                         <div class="mb-3">

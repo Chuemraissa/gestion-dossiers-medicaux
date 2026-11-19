@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Models\ElementListe;
 use App\Models\Resource;
 use App\Models\Param;
 
@@ -23,7 +25,7 @@ class ParamsController extends Controller
             'taille' => 'required',
             'temperature' => 'required',
             'pression_arterielle' => 'required',
-            'groupe_sanguin' => 'required',
+            'groupe_sanguin' => ['required', Rule::in(ElementListe::valeurs('groupes_sanguins'))],
         ]);
     
             $param = new Param();

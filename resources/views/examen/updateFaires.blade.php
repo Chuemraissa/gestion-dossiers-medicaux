@@ -1,7 +1,7 @@
 @extends('layouts.app')
       
       @section('title')
-          update
+    @lang('messages.modif')
       @endsection
       
       @section('content')
@@ -43,10 +43,10 @@
                               <select class="form-control" id="examen" name="type">
                               @foreach($examens as $examen)
                               @if($effectuers->examen_id == $examen->id)
-                              <option value="{{ $examen->id }}">{{ $examen->type }}</option>
+                              <option value="{{ $examen->id }}">{{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}</option>
                               @endif
                               @if($effectuers->examen_id != $examen->id)
-                              <option value="{{ $examen->id }}">{{ $examen->type }}</option>
+                              <option value="{{ $examen->id }}">{{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}</option>
                               @endif
                               @endforeach
                               </select>
