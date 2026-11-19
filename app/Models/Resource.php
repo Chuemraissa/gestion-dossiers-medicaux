@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Param;
@@ -18,9 +20,9 @@ use App\Models\Faire;
 use Illuminate\Notifications\Notifiable;
 
 
-class Resource extends Model implements AuthenticatableContract
+class Resource extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-   use HasFactory, Authenticatable, Notifiable;
+   use HasFactory, Authenticatable, CanResetPassword, Notifiable;
 
     protected $fillable = [
         'nom_prenom',

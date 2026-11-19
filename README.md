@@ -5,7 +5,8 @@ consultations, ordonnances, examens, médicaments, rendez-vous et planning.
 
 ## Rôles et accès
 
-Les rôles et ce que chacun peut faire sont enregistrés en base de données :
+Les rôles et ce que chacun peut faire sont enregistrés en base de données, et se modifient
+depuis le menu **Administration → Rôles et accès** (réservé à l'administrateur) :
 - table `roles` : les rôles (code, nom affiché, rôle patient ou non) ;
 - table `role_acces` : les accès de chaque rôle (ex. `patients`, `prescription`).
 
@@ -29,12 +30,19 @@ Par défaut :
 Les listes des formulaires (statuts de rendez-vous, types d'examen, de consultation et d'antécédent,
 groupes sanguins, tarifs de consultation) sont dans la table `listes`.
 Valeurs de départ : `database/seeders/ListeSeeder.php`, chargées par `php artisan db:seed`.
+Elles se modifient depuis **Administration → Listes de choix**.
 
 ## Informations de l'établissement
 
 Le nom, l'adresse et les téléphones affichés sur les documents imprimés et la page d'aide
 sont dans la table `parametres` (clés `clinique_nom`, `clinique_adresse`, `clinique_region`,
 `clinique_telephone`, `support_telephone`). Valeurs de départ : `database/seeders/ParametreSeeder.php`.
+Elles se modifient depuis **Administration → Informations de la clinique**.
+
+## Mot de passe oublié
+
+Sur la page de connexion, « Mot de passe oublié ? » envoie par e-mail un lien valable 60 minutes
+pour choisir un nouveau mot de passe. Le serveur d'e-mails doit donc être configuré dans `.env`.
 
 ## Langues
 
@@ -109,4 +117,4 @@ Dans le `.env` du serveur :
 - les vraies informations de la base de données et du serveur d'e-mails ;
 - `ADMIN_EMAIL` / `ADMIN_PASSWORD` pour le premier compte, à changer après la première connexion.
 
-Puis renseigner la table `parametres` avec les informations de l'établissement.
+Puis renseigner les informations de l'établissement dans **Administration → Informations de la clinique**.

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,6 +17,9 @@
             <form method="POST" action="/login">
                 @csrf
                     <center class=""><h2><u>{{ __('Connexion') }}</u></h2></center>
+                    @if (session('status'))
+                        <p class="alert alert-success">{{ session('status') }}</p>
+                    @endif
                     <div class="form-group">
                         <label for="email">{{ __('Adresse e-mail') }}</label>
                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>

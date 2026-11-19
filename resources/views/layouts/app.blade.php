@@ -154,6 +154,14 @@
                         <span class="nav-link-text ms-1 font-weight-bold">@lang('messages.resources')</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white " href="/administration/roles">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10 bi bi-gear-fill"></i>
+                        </div>
+                        <span class="nav-link-text ms-1 font-weight-bold">{{ __('Administration') }}</span>
+                    </a>
+                </li>
                 @endif
             @if(auth()->user()?->aAcces('tableau_de_bord')) 
                 <li class="nav-item">

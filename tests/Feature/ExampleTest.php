@@ -74,4 +74,40 @@ class ExampleTest extends TestCase
 
         $this->assertSame(1, Ordonnance::whereNull('medicament_id')->count());
     }
+
+    public function test_mot_de_passe_oublie_envoie_un_lien_et_permet_de_changer_le_mot_de_passe(): void
+    {
+        \Illuminate\Support\Facades\Notification::fake();
+        $compte = $this->compte('medecin', 'medecin@test.cm');
+
+        $this->post('/mot-de-passe-oublie', ['email' => 'medecin@test.cm'])->assertSessionHas('status');
+
+        $jeton = null;
+        \Illuminate\Support\Facades\Notification::assertSentTo($compte, \Illuminate\Auth\Notifications\ResetPassword::class,
+            function ($notification) use (&$jeton) {
+                $jeton = $notification->token;
+
+                return true;
+            });
+
+        $this->post('/reinitialiser-mot-de-passe', [
+            'token' => $jeton,
+            'email' => 'medecin@test.cm',
+            'password' => 'nouveau123',
+            'password_confirmation' => 'nouveau123',
+        ])->assertRedirect('/login');
+
+        $this->post('/login', ['email' => 'medecin@test.cm', 'password' => 'nouveau123'])->assertRedirect('/');
+    }
+
+    public function test_seul_l_administrateur_accede_a_l_administration(): void
+    {
+        $admin = $this->compte('admin', 'admin@test.cm');
+        $medecin = $this->compte('medecin', 'medecin@test.cm');
+
+        $this->actingAs($admin)->get('/administration/roles')->assertOk();
+        $this->actingAs($admin)->get('/administration/listes')->assertOk();
+        $this->actingAs($admin)->get('/administration/parametres')->assertOk();
+        $this->actingAs($medecin)->get('/administration/roles')->assertForbidden();
+    }
 }

@@ -11,6 +11,8 @@ use App\Http\Controllers\TraitementController;
 use App\Http\Controllers\ConsultationsController;
 use App\Http\Controllers\RdvController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MotDePasseController;
+use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\AntecedentsController;
 use App\Http\Controllers\ParamsController;
 use App\Http\Controllers\PatientsController;
@@ -27,6 +29,13 @@ Route::get('locale/{lang}', [LocalizationController::class, 'setLocale']);
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+
+    // Mot de passe oublié : demande du lien par e-mail, puis choix du nouveau mot de passe
+    Route::get('/mot-de-passe-oublie', [MotDePasseController::class, 'formulaireDemande'])->name('password.request');
+    Route::post('/mot-de-passe-oublie', [MotDePasseController::class, 'envoyerLien'])
+        ->middleware('throttle:5,1')->name('password.email');
+    Route::get('/reinitialiser-mot-de-passe/{token}', [MotDePasseController::class, 'formulaireReinitialisation'])->name('password.reset');
+    Route::post('/reinitialiser-mot-de-passe', [MotDePasseController::class, 'reinitialiser'])->name('password.update');
 });
 
 /*
@@ -62,6 +71,22 @@ Route::middleware('auth')->group(function () {
     // Liste du personnel : un onglet par rôle, ex. /personnel/medecin
     Route::middleware('acces:gestion_personnel')->group(function () {
         Route::get('/personnel/{role?}', [UtilisateursController::class, 'listeresources'])->name('personnel');
+    });
+
+    // Administration : rôles et accès, listes de choix, informations de la clinique
+    Route::middleware('acces:gestion_personnel')->prefix('administration')->group(function () {
+        Route::get('/roles', [AdministrationController::class, 'roles'])->name('admin.roles');
+        Route::post('/roles', [AdministrationController::class, 'enregistrerRoles']);
+        Route::post('/roles/ajouter', [AdministrationController::class, 'ajouterRole']);
+        Route::get('/delete-role/{id}', [AdministrationController::class, 'supprimerRole']);
+
+        Route::get('/listes/{liste?}', [AdministrationController::class, 'listes'])->name('admin.listes');
+        Route::post('/listes/ajouter', [AdministrationController::class, 'ajouterElement']);
+        Route::post('/listes/modifier/{id}', [AdministrationController::class, 'modifierElement']);
+        Route::get('/delete-element/{id}', [AdministrationController::class, 'supprimerElement']);
+
+        Route::get('/parametres', [AdministrationController::class, 'parametres'])->name('admin.parametres');
+        Route::post('/parametres', [AdministrationController::class, 'enregistrerParametres']);
     });
 
     // Patients, paramètres, antécédents

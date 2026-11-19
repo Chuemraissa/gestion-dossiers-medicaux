@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'reset' => 'Your password has been reset.',
-    'sent' => 'We have emailed your password reset link.',
-    'throttled' => 'Please wait before retrying.',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that email address.",
+    'reset' => '您的密码已重置。',
+    'sent' => '如果该地址对应某个账户，重置链接已发送。',
+    'throttled' => '请稍候再试。',
+    'token' => '该重置链接无效或已过期。',
+    'user' => '没有与该电子邮件地址对应的账户。',
 
 ];
