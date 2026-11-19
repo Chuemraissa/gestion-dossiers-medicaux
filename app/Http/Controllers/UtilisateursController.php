@@ -147,13 +147,13 @@ class UtilisateursController extends Controller
         $this->verifierDroitSurRole($resource->role);
 
         if ($resource->id === auth()->id()) {
-            return redirect()->back()->with('status', 'Vous ne pouvez pas supprimer votre propre compte.');
+            return redirect()->back()->with('status', __('Vous ne pouvez pas supprimer votre propre compte.'));
         }
 
         try {
             $resource->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()->with('status', 'Impossible de supprimer ce compte : il est lié à des dossiers médicaux, consultations ou rendez-vous.');
+            return redirect()->back()->with('status', __('Impossible de supprimer ce compte : il est lié à des dossiers médicaux, consultations ou rendez-vous.'));
         }
 
         return $this->retourListe($resource->role, 'supprimé');
@@ -166,7 +166,7 @@ class UtilisateursController extends Controller
     private function verifierDroitSurRole(?string $role): void
     {
         if (! $this->aAcces('gestion_personnel') && $role !== Role::codePatient()) {
-            abort(403, 'Vous ne pouvez gérer que les comptes patients.');
+            abort(403, __('Vous ne pouvez gérer que les comptes patients.'));
         }
     }
 
@@ -175,7 +175,11 @@ class UtilisateursController extends Controller
      */
     private function retourListe(?string $role, string $action)
     {
-        $message = "Le compte a été {$action} avec succès.";
+        $message = match ($action) {
+            'ajouté' => __('Le compte a été ajouté avec succès.'),
+            'modifié' => __('Le compte a été modifié avec succès.'),
+            default => __('Le compte a été supprimé avec succès.'),
+        };
 
         if ($role === Role::codePatient() || ! $this->aAcces('gestion_personnel')) {
             return redirect()->route('patient')->with('status', $message);

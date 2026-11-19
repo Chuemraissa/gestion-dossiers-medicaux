@@ -36,7 +36,7 @@
         <div class="col-2 col-md-2 justify-content-end">
           @if(auth()->user()?->aAcces('examens_gestion')) 
           <button type="button" data-toggle="modal" data-target="#myModal3" class="bg-primary bordure">
-            <i class="fas fa-user-plus mr-2"></i>Ajouter un traitement
+            <i class="fas fa-user-plus mr-2"></i>{{ __('Ajouter un résultat d\'examen') }}
           </button>
           @endif
           </div>
@@ -46,7 +46,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel3">Ajouter un traitement</h5>
+                        <h5 class="modal-title" id="exampleModalLabel3">{{ __('Ajouter un résultat d\'examen') }}</h5>
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                         <!-- Formulaire de remplissage -->
@@ -59,31 +59,31 @@
 
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label" for="patient">NomPatient</label>
+                            <label class="form-label" for="patient">{{ __('Patient') }}</label>
                             <select class="form-control" id="patient" name="patient">
-                              <option value="">Selectionnez un patient</option>
+                              <option value="">{{ __('Sélectionnez un patient') }}</option>
                             @foreach($patients as $patient)
                               <option value="{{ $patient->id }}">{{ $patient->nom_prenom }}</option>
                             @endforeach
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="examen">TypeExamen</label>
+                            <label class="form-label" for="examen">{{ __('Type d\'examen') }}</label>
                             <select class="form-control" id="examen" name="type">
-                            <option value="">Selectionnez un type</option>
+                            <option value="">{{ __('Sélectionnez un type') }}</option>
                             @foreach($examens as $examen)
                               <option value="{{ $examen->id }}">{{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}</option>
                             @endforeach
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="resultat">Resultat</label>
+                            <label class="form-label" for="resultat">{{ __('Résultat') }}</label>
                             <input type="text" class="form-control" id="resultat" name="resultat">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Fermer') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('Enregistrer') }}</button>
                     </div>
                         </form>
                 </div>
@@ -93,15 +93,15 @@
         <table class="table table-striped table-hover">
           <thead class="bg-primary text-white sticky-top">
             <tr>
-              <th scope="col">NomPatient</th>
+              <th scope="col">{{ __('Patient') }}</th>
               @if(auth()->user()?->aAcces('voir_laborantin'))
-              <th scope="col">NomLaborantin</th>
+              <th scope="col">{{ __('Laborantin') }}</th>
               @endif
-              <th scope="col">TypeExamen</th>
-              <th scope="col">Resultat</th>
-              <th scope="col">Date</th>
+              <th scope="col">{{ __('Type d\'examen') }}</th>
+              <th scope="col">{{ __('Résultat') }}</th>
+              <th scope="col">{{ __('Date') }}</th>
               @if(auth()->user()?->aAcces('examens_gestion')) 
-              <th scope="col">Action</th>
+              <th scope="col">{{ __('Action') }}</th>
               @endif
             </tr>
           </thead>
@@ -163,7 +163,7 @@
         <div class="col-2 col-md-2 justify-content-end">
           @if(auth()->user()?->aAcces('medicaments_gestion')) 
           <button type="button" data-toggle="modal" data-target="#myModal4" class="bg-primary bordure">
-            <i class="fas fa-user-plus mr-2"></i>Ajouter un medicament
+            <i class="fas fa-user-plus mr-2"></i>{{ __('Ajouter un médicament') }}
           </button>
           @endif
         </div>
@@ -173,7 +173,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel4">Ajouter un medicament</h5>
+                        <h5 class="modal-title" id="exampleModalLabel4">{{ __('Ajouter un médicament') }}</h5>
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/ajouter/medicament" method="POST">
@@ -185,30 +185,30 @@
 
                       <div class="modal-body">
                         <div class="mb-3">
-                          <label class="form-label" for="categorie">Categorie</label>
+                          <label class="form-label" for="categorie">{{ __('Catégorie') }}</label>
                           <select class="form-control" id="categorie" name="categorie">
-                          <option value="">Selectionnez un categorie</option>
+                          <option value="">{{ __('Sélectionnez une catégorie') }}</option>
                       @foreach($categories as $categorie)
                             <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
                       @endforeach
                           </select>
                         </div>
                         <div class="mb-3">
-                          <label class="form-label" for="nom">Nom</label>
+                          <label class="form-label" for="nom">{{ __('Nom') }}</label>
                           <input type="text" class="form-control" name="nom" id="nom">
                         </div>
                         <div class="mb-3">
-                          <label class="form-label" for="quantite">Quantité</label>
+                          <label class="form-label" for="quantite">{{ __('Quantité') }}</label>
                           <input type="number" min="1" class="form-control" name="quantite" id="quantite">
                         </div>
                         <div class="mb-3">
-                          <label class="form-label" for="cout">Coût</label>
+                          <label class="form-label" for="cout">{{ __('Coût') }}</label>
                           <input type="number" min="1" class="form-control" name="cout" id="cout">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Fermer') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('Enregistrer') }}</button>
                     </div>
                     </form>
                 </div>
@@ -218,12 +218,12 @@
         <table class="table table-striped table-hover">
           <thead class="bg-primary text-white sticky-top">
             <tr>
-              <th scope="col">Categorie</th>
-              <th scope="col">Nom</th>
-              <th scope="col">Quantité</th>
-              <th scope="col">Cout</th>
+              <th scope="col">{{ __('Catégorie') }}</th>
+              <th scope="col">{{ __('Nom') }}</th>
+              <th scope="col">{{ __('Quantité') }}</th>
+              <th scope="col">{{ __('Coût') }}</th>
               @if(auth()->user()?->aAcces('medicaments_gestion')) 
-              <th scope="col">Action</th>
+              <th scope="col">{{ __('Action') }}</th>
               @endif
             </tr>
           </thead>   
@@ -264,7 +264,7 @@
         <div class="col-2 col-md-2 justify-content-end">
           @if(auth()->user()?->aAcces('categories_gestion')) 
           <button type="button" data-toggle="modal" data-target="#myModal5" class="bg-primary bordure">
-            <i class="fas fa-user-plus mr-2"></i>Ajouter une categorie
+            <i class="fas fa-user-plus mr-2"></i>{{ __('Ajouter une catégorie') }}
           </button>
           @endif
         </div>
@@ -274,7 +274,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel5">Ajouter une categorie</h5>
+                        <h5 class="modal-title" id="exampleModalLabel5">{{ __('Ajouter une catégorie') }}</h5>
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                         <!-- Formulaire de remplissage -->
@@ -286,13 +286,13 @@
                         @endforeach
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label" for="nom">Nom</label>
+                            <label class="form-label" for="nom">{{ __('Nom') }}</label>
                             <input type="text" class="form-control" name="nom">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Fermer') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('Enregistrer') }}</button>
                     </div>
                     </form>
                 </div>
@@ -302,9 +302,9 @@
         <table class="table table-striped table-hover">
           <thead class="bg-primary text-white sticky-top">
             <tr>
-              <th scope="col">Nom</th>
+              <th scope="col">{{ __('Nom') }}</th>
               @if(auth()->user()?->aAcces('categories_gestion')) 
-              <th scope="col">Action</th>
+              <th scope="col">{{ __('Action') }}</th>
               @endif
             </tr>
           </thead>
@@ -344,11 +344,11 @@
         <table class="table table-striped table-hover">
           <thead class="bg-primary text-white sticky-top">
             <tr>
-              <th scope="col">Dose</th>
-              <th scope="col">Frequence</th>
-              <th scope="col">Duree</th>
+              <th scope="col">{{ __('Dose') }}</th>
+              <th scope="col">{{ __('Fréquence') }}</th>
+              <th scope="col">{{ __('Durée') }}</th>
               @if(auth()->user()?->aAcces('categories_gestion')) 
-              <th scope="col">Action</th>
+              <th scope="col">{{ __('Action') }}</th>
               @endif
             </tr>
           </thead>

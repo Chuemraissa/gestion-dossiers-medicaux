@@ -27,7 +27,7 @@
             <div class="input-group p-1">
                 <div class="form-outline" data-mdb-input-init>
                     <input type="search" id="form1" class="form-control" />
-                    <label class="form-label ml-2" for="form1">Search</label>
+                    <label class="form-label ml-2" for="form1">{{ __('Rechercher') }}</label>
                 </div>
                 <button type="button" class="bg-primary bordure" data-mdb-ripple-init>
                     <i class="fas fa-search"></i>
@@ -37,7 +37,7 @@
         <div class="col-2 col-md-4">
           @if(auth()->user()?->aAcces('prescription')) 
             <button type="button" data-toggle="modal" data-target="#myModal" class="bg-primary bordure">
-                <i class="fas fa-user-plus mr-2"></i>Ajouter une ordonnances
+                <i class="fas fa-user-plus mr-2"></i>{{ __('Ajouter une ordonnance') }}
             </button>
           @endif
         </div>
@@ -47,7 +47,7 @@
           <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ajouter une ordonnance</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">{{ __('Ajouter une ordonnance') }}</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                   <!-- Formulaire de remplissage -->
@@ -62,22 +62,22 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="mb-3">
-                        <label class="form-label" for="patient">Patient</label>
+                        <label class="form-label" for="patient">{{ __('Patient') }}</label>
                         <select class="form-control" id="patient" name="patient">
-                          <option value="">Selectionnez un patient</option>
+                          <option value="">{{ __('Sélectionnez un patient') }}</option>
                         @foreach($patients as $patient)
                           <option value="{{ $patient->id }}">{{ $patient->nom_prenom }}</option>
                         @endforeach
                         </select>
                       </div>
                       <div class="mb-3">
-                          <label class="form-label" for="description">Description</label>
+                          <label class="form-label" for="description">{{ __('Description') }}</label>
                           <textarea name="description" class="form-control" id=""></textarea>
                       </div>
                       <div class="mb-3">
-                        <label class="form-label" for="examen">Examen</label>
+                        <label class="form-label" for="examen">{{ __('Examen') }}</label>
                         <select class="form-control" id="examen" name="examen">
-                        <option value="">Selectionnez un examen</option>
+                        <option value="">{{ __('Sélectionnez un examen') }}</option>
                         @foreach($examens as $examen)
                           <option value="{{ $examen->id }}">{{ \App\Models\ElementListe::libelle('types_examen', $examen->type) }}</option>
                         @endforeach
@@ -86,32 +86,32 @@
                     </div>
                     <div class="col-md-6">
                       <div class="mb-3">
-                        <label class="form-label" for="medicament">Medicament</label>
+                        <label class="form-label" for="medicament">{{ __('Médicament') }}</label>
                         <select class="form-control" id="medicament" name="medicament">
-                        <option value="">Selectionnez un medicament</option>
+                        <option value="">{{ __('Sélectionnez un médicament') }}</option>
                         @foreach($medicaments as $medicament)
                           <option value="{{ $medicament->id }}">{{ $medicament->nom }}</option>
                         @endforeach
                         </select>
                       </div>
                       <div class="mb-3">
-                          <label class="form-label" for="dose">Dose</label>
+                          <label class="form-label" for="dose">{{ __('Dose') }}</label>
                           <input type="number" min="1" class="form-control" name="dose">
                       </div>
                       <div class="mb-3">
-                          <label class="form-label" for="frequence">Fréquence</label>
+                          <label class="form-label" for="frequence">{{ __('Fréquence') }}</label>
                           <input type="text" class="form-control" name="frequence">
                       </div>
                       <div class="mb-3">
-                          <label class="form-label" for="dure">Durée</label>
+                          <label class="form-label" for="dure">{{ __('Durée') }}</label>
                           <input type="number" min="1" class="form-control" name="duree">
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Fermer') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ __('Enregistrer') }}</button>
                 </div>
                     </form>
             </div>
@@ -121,16 +121,16 @@
           <table class="table table-striped table-hover">
             <thead class="bg-primary text-white sticky-top">
               <tr>
-                <th scope="col">NomPatient</th>
+                <th scope="col">{{ __('Patient') }}</th>
                 @if(auth()->user()?->aAcces('voir_medecin'))
-                <th scope="col">NomMedecin</th>
+                <th scope="col">{{ __('Médecin') }}</th>
                 @endif
-                <th scope="col">Examen</th>
-                <th scope="col">NomMedicament</th>
-                <th scope="col">IdPosologie</th>
-                <th scope="col">Description</th>
+                <th scope="col">{{ __('Examen') }}</th>
+                <th scope="col">{{ __('Médicament') }}</th>
+                <th scope="col">{{ __('N° posologie') }}</th>
+                <th scope="col">{{ __('Description') }}</th>
                 @if(auth()->user()?->aAcces('prescription')) 
-                <th scope="col">Action</th>
+                <th scope="col">{{ __('Action') }}</th>
                 @endif
                 </tr>
             </thead>
@@ -153,8 +153,8 @@
                     @endforeach
                   </td>
                   @endif
-                  <td>{{ $ordonnancesAl->examen->type }}</td>
-                  <td>{{ $ordonnancesAl->medicament_id == NULL?'En_attente':$ordonnancesAl->medicament->nom }}</td>
+                  <td>{{ \App\Models\ElementListe::libelle('types_examen', $ordonnancesAl->examen?->type) }}</td>
+                  <td>{{ $ordonnancesAl->medicament_id == NULL?__('En attente'):$ordonnancesAl->medicament->nom }}</td>
                   <td>{{ $ordonnancesAl->posologie_id }}</td>
                   <td>{{ $ordonnancesAl->description }}</td>
                   @if(auth()->user()?->aAcces('prescription')) 
@@ -163,7 +163,7 @@
                       <a href="/imprimer/{{ $ordonnancesAl->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-print"></i></a>
                         <a href="/update-ordonnances/{{ $ordonnancesAl->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;"><i class="fas fa-edit"></i></a>
                         <a href="/delete-ordonnances/{{ $ordonnancesAl->id }}" class="btn btn-danger btn-sm" style="line-height: 1;"><i class="fas fa-trash"></i></a>
-                        <a href="/certificat/{{ $ordonnancesAl->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;">certificat</a>
+                        <a href="/certificat/{{ $ordonnancesAl->id }}" class="btn btn-success btn-sm mr-2" style="line-height: 1;">{{ __('Certificat') }}</a>
                       @endif
                   </td>
                   @endif
@@ -191,7 +191,7 @@
         @if(auth()->user()?->aAcces('examens_gestion')) 
         <div class="col-2 col-md-2 justify-content-end">
           <button type="button" data-toggle="modal" data-target="#myModal1" class="bg-primary bordure">
-            <i class="fas fa-user-plus mr-2"></i>Ajouter un examen
+            <i class="fas fa-user-plus mr-2"></i>{{ __('Ajouter un examen') }}
           </button>
         </div>
         @endif
@@ -201,7 +201,7 @@
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel1">Ajouter un examen</h5>
+                      <h5 class="modal-title" id="exampleModalLabel1">{{ __('Ajouter un examen') }}</h5>
                       <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                   </div>
                       <!-- Formulaire de remplissage -->
@@ -214,24 +214,24 @@
 
                   <div class="modal-body">
                       <div class="mb-3">
-                          <label class="form-label" for="type">Type</label>
+                          <label class="form-label" for="type">{{ __('Type') }}</label>
                           <select class="form-control" id="type" name="type_examen">
-                            <option value="">Sélectionnez le type</option>
+                            <option value="">{{ __('Sélectionnez un type') }}</option>
                             <x-options-liste liste="types_examen" :selection="old('type_examen')" />
                           </select>
                       </div>
                       <div class="mb-3">
-                        <label class="form-label" for="description">Description</label>
+                        <label class="form-label" for="description">{{ __('Description') }}</label>
                         <textarea class="form-control" name="description_examen" id="description"></textarea> 
                       </div>
                       <div class="mb-3">
-                        <label class="form-label" for="cout">Coût</label>
+                        <label class="form-label" for="cout">{{ __('Coût') }}</label>
                         <input type="number" class="form-control" name="cout" id="cout">
                       </div>
                   </div>
                   <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                      <button type="submit" class="btn btn-primary">Enregistrer</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Fermer') }}</button>
+                      <button type="submit" class="btn btn-primary">{{ __('Enregistrer') }}</button>
                   </div>
                       </form>
               </div>
@@ -241,11 +241,11 @@
         <table class="table table-striped table-hover">
           <thead class="bg-primary text-white sticky-top">
             <tr>
-              <th scope="col">Type</th>
-              <th scope="col">Description</th>
-              <th scope="col">Cout</th>
+              <th scope="col">{{ __('Type') }}</th>
+              <th scope="col">{{ __('Description') }}</th>
+              <th scope="col">{{ __('Coût') }}</th>
               @if(auth()->user()?->aAcces('examens_gestion')) 
-              <th scope="col">Action</th>
+              <th scope="col">{{ __('Action') }}</th>
               @endif
             </tr>
           </thead>
@@ -284,7 +284,7 @@
         </div>
         <div class="col-2 col-md-2 justify-content-end">
           <button type="button" data-toggle="modal" data-target="#myModalRdv" class="bg-primary bordure">
-            <i class="fas fa-user-plus mr-2"></i>Ajouter un Rendez-vous
+            <i class="fas fa-user-plus mr-2"></i>{{ __('Ajouter un rendez-vous') }}
           </button>
         </div>
       </div>
@@ -293,7 +293,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabelRdv">Ajouter un Rendez-vous</h5>
+                        <h5 class="modal-title" id="exampleModalLabelRdv">{{ __('Ajouter un rendez-vous') }}</h5>
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                         <!-- Formulaire de remplissage -->
@@ -307,41 +307,41 @@
                       <div class="row">
                           <div class="col-md-6">
                             <div class="mb-3">
-                              <label class="form-label" for="patient">Patient</label>
+                              <label class="form-label" for="patient">{{ __('Patient') }}</label>
                               <select class="form-control" id="patient" name="patient">
-                              <option value="">Selectionner un patient</option>
+                              <option value="">{{ __('Sélectionnez un patient') }}</option>
                               @foreach($patients as $patient)
                                 <option value="{{ $patient->id }}">{{ $patient->nom_prenom }}</option>
                               @endforeach
                               </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="date">Date</label>
+                                <label class="form-label" for="date">{{ __('Date') }}</label>
                                 <input type="date" class="form-control" name="date">
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label" for="heure">Heure</label>
+                                <label class="form-label" for="heure">{{ __('Heure') }}</label>
                                 <input type="time" class="form-control" name="heure">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="statut">Statut</label>
+                                <label class="form-label" for="statut">{{ __('Statut') }}</label>
                                 <select name="statut" id="statut" class="form-control">
-                                  <option value="">Selectionner un statut</option>
+                                  <option value="">{{ __('Sélectionnez un statut') }}</option>
                                   <x-options-liste liste="statuts_rdv" :selection="old('statut')" />
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="motif">Motif</label>
+                                <label class="form-label" for="motif">{{ __('Motif') }}</label>
                                 <input type="text" class="form-control" name="motif">
                             </div>
                           </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Fermer') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('Enregistrer') }}</button>
                     </div>
                     </form>
                 </div>
@@ -351,15 +351,15 @@
           <table class="table table-striped table-hover">
             <thead class="bg-primary text-white sticky-top">
               <tr>
-                <th scope="col">NomPatient</th>
+                <th scope="col">{{ __('Patient') }}</th>
                 @if(auth()->user()?->aAcces('voir_medecin'))
-                <th scope="col">NomMedecin</th>
+                <th scope="col">{{ __('Médecin') }}</th>
                 @endif
-                <th scope="col">Date</th>
-                <th scope="col">Heure</th>
-                <th scope="col">Statut</th>
-                <th scope="col">Motif</th>
-                <th scope="col">Action</th>
+                <th scope="col">{{ __('Date') }}</th>
+                <th scope="col">{{ __('Heure') }}</th>
+                <th scope="col">{{ __('Statut') }}</th>
+                <th scope="col">{{ __('Motif') }}</th>
+                <th scope="col">{{ __('Action') }}</th>
               </tr>
             </thead>
             <tbody>

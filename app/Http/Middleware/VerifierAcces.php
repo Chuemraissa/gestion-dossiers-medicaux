@@ -19,6 +19,6 @@ class VerifierAcces
             return $next($request);
         }
 
-        abort(403, "Vous n'avez pas accès à cette page.");
+        abort(403, __('Vous n\'avez pas accès à cette page.'));
     }
 }

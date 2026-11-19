@@ -30,6 +30,12 @@ Les listes des formulaires (statuts de rendez-vous, types d'examen, de consultat
 groupes sanguins, tarifs de consultation) sont dans la table `listes`.
 Valeurs de départ : `database/seeders/ListeSeeder.php`, chargées par `php artisan db:seed`.
 
+## Informations de l'établissement
+
+Le nom, l'adresse et les téléphones affichés sur les documents imprimés et la page d'aide
+sont dans la table `parametres` (clés `clinique_nom`, `clinique_adresse`, `clinique_region`,
+`clinique_telephone`, `support_telephone`). Valeurs de départ : `database/seeders/ParametreSeeder.php`.
+
 ## Langues
 
 Une langue = un dossier dans `lang/` (avec `messages.php`). Le menu « Langue » les affiche automatiquement.
@@ -89,3 +95,18 @@ Si le serveur d'e-mails ne répond pas, l'application continue de fonctionner. L
 ```bash
 php artisan test
 ```
+
+## Bibliothèques (CSS / JavaScript)
+
+Bootstrap, jQuery, Popper, Font Awesome et FullCalendar sont livrés dans `public/vendor/` :
+l'application s'affiche correctement même sans connexion Internet.
+
+## Mise en service chez un client
+
+Dans le `.env` du serveur :
+- `APP_ENV=production` et `APP_DEBUG=false` (les erreurs techniques ne sont plus montrées aux utilisateurs) ;
+- `APP_URL` : l'adresse réelle de l'application ;
+- les vraies informations de la base de données et du serveur d'e-mails ;
+- `ADMIN_EMAIL` / `ADMIN_PASSWORD` pour le premier compte, à changer après la première connexion.
+
+Puis renseigner la table `parametres` avec les informations de l'établissement.

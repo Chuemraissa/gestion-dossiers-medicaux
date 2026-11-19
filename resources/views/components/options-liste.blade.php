@@ -3,5 +3,5 @@
     <option value="{{ $selection }}" selected>{{ $selection }}</option>
 @endif
 @foreach ($options as $option)
-    <option value="{{ $option->valeur }}" @selected((string) $option->valeur === (string) $selection)>{{ $option->libelle }}</option>
+    <option value="{{ $option->valeur }}" @selected((string) $option->valeur === (string) $selection)>{{ __($option->libelle) }}</option>
 @endforeach

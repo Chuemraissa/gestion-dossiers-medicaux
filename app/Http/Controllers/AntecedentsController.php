@@ -32,7 +32,7 @@ class AntecedentsController extends Controller
             $antecedent->save();
         
     
-        return redirect('/listeantecedents')->with('status', 'Les antécédents ont été ajoutés avec succès.');
+        return redirect('/listeantecedents')->with('status', __('L\'antécédent a été ajouté avec succès.'));
     }
     
     public function update_id_antecedent($id)
@@ -57,7 +57,7 @@ class AntecedentsController extends Controller
         $antecedent->resource_id = $request->patient;
         $antecedent->update();  
 
-        return redirect('/listeantecedents')->with('status', 'L\'utilisateur a ete modifié avec succes.');
+        return redirect('/listeantecedents')->with('status', __('L\'antécédent a été modifié avec succès.'));
         
     }
     
@@ -66,6 +66,6 @@ class AntecedentsController extends Controller
         $antecedent = Antecedent::findOrFail($id);
         $antecedent->delete();
 
-        return redirect('/listeantecedents')->with('status', 'L\'utilisateur a ete supprimé avec succes.');
+        return redirect('/listeantecedents')->with('status', __('L\'antécédent a été supprimé avec succès.'));
     }
 }

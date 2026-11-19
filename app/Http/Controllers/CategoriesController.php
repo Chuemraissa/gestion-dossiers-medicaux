@@ -23,7 +23,7 @@ class CategoriesController extends Controller
         $resources->nom = $request->nom;
         $resources->save();
 
-        return redirect('/listecategories');
+        return redirect('/listecategories')->with('status', __('La catégorie a été ajoutée avec succès.'));
     }
     
     public function update_id_categorie($id)
@@ -42,7 +42,7 @@ class CategoriesController extends Controller
         $categorie->nom = $request->nom;
         $categorie->update();  
 
-        return redirect('/listecategories');
+        return redirect('/listecategories')->with('status', __('La catégorie a été modifiée avec succès.'));
         
     }
 
@@ -51,7 +51,7 @@ class CategoriesController extends Controller
         $categorie = Categorie::findOrFail($id);
         $categorie->delete();
 
-        return redirect('/listecategories');
+        return redirect('/listecategories')->with('status', __('La catégorie a été supprimée avec succès.'));
     }
 
 }

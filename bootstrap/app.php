@@ -39,7 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // au lieu d'une page d'erreur, on revient à la page précédente avec un message clair.
         $exceptions->render(function (QueryException $e, Request $request) {
             if ($e->getCode() === '23000' && $request->is('delete-*')) {
-                return redirect()->back()->with('status', 'Suppression impossible : cet élément est encore utilisé ailleurs dans l\'application.');
+                return redirect()->back()->with('status', __('Suppression impossible : cet élément est encore utilisé ailleurs dans l\'application.'));
             }
         });
     })->create();

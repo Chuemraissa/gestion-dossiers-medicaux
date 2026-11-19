@@ -45,7 +45,7 @@ class ConsultationsController extends Controller
             $consulter->cout = $request->cout;
             $consulter->save();
     
-        return redirect('/listesconsultations')->with('status', 'L\'utilisateur, les paramètres et les antécédents ont été ajoutés avec succès.');
+        return redirect('/listesconsultations')->with('status', __('La consultation a été ajoutée avec succès.'));
     }
     
     public function update_id_consultation($id)
@@ -76,7 +76,7 @@ class ConsultationsController extends Controller
             $consulter->cout = $request->cout;
             $consulter->update();  
 
-        return redirect('/listesconsultations')->with('status', 'L\'utilisateur a ete modifié avec succes.');
+        return redirect('/listesconsultations')->with('status', __('La consultation a été modifiée avec succès.'));
         
     }
     
@@ -85,7 +85,7 @@ class ConsultationsController extends Controller
         $consulter = Consulter::findOrFail($id);
         $consulter->delete();
 
-        return redirect('/listesconsultations')->with('status', 'L\'utilisateur a ete supprimé avec succes.');
+        return redirect('/listesconsultations')->with('status', __('La consultation a été supprimée avec succès.'));
     }
     
     public function vue_id_consultation($id)
@@ -109,7 +109,7 @@ class ConsultationsController extends Controller
         $estSoignant = $user->aAcces('consultations');
 
         if (! $estLePatient && ! $estSoignant) {
-            abort(403, "Vous n'avez pas accès à ce dossier.");
+            abort(403, __('Vous n\'avez pas accès à ce dossier.'));
         }
        
        $params = Param::where('resource_id', $resources->id)->get();

@@ -11,7 +11,7 @@
   <ul class="nav nav-tabs" role="tablist">
     @foreach($roles as $role)
     <li class="nav-item">
-      <a class="nav-link {{ $roleActif && $roleActif->code === $role->code ? 'active' : null }}" href="{{ route('personnel', $role->code) }}" role="tab">{{ $role->libelle }}</a>
+      <a class="nav-link {{ $roleActif && $roleActif->code === $role->code ? 'active' : null }}" href="{{ route('personnel', $role->code) }}" role="tab">{{ __($role->libelle) }}</a>
     </li>
     @endforeach
   </ul>
@@ -32,7 +32,7 @@
         </div>
         <div class="col-2 col-md-2">
           <button type="button" data-toggle="modal" data-target="#myModalPersonnel" class="bg-primary bordure">
-              <i class="fas fa-user-plus mr-2"></i>Ajouter : {{ $roleActif->libelle }}
+              <i class="fas fa-user-plus mr-2"></i>{{ __('Ajouter') }} : {{ __($roleActif->libelle) }}
           </button>
         </div>
       </div>
@@ -43,7 +43,7 @@
           <div class="modal-content">
 
               <div class="modal-header">
-                  <h5 class="modal-title" id="titreModalPersonnel">Ajouter : {{ $roleActif->libelle }}</h5>
+                  <h5 class="modal-title" id="titreModalPersonnel">{{ __('Ajouter') }} : {{ __($roleActif->libelle) }}</h5>
                   <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
               </div>
             <form action="/ajouter/resources" method="POST">
@@ -57,42 +57,42 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <label class="form-label" for="nom_prenom">Nom et prénom</label>
+                      <label class="form-label" for="nom_prenom">{{ __('Nom et prénom') }}</label>
                       <input type="text" class="form-control" id="nom_prenom" name="nom_prenom" value="{{ old('nom_prenom') }}">
                     </div>
                     <div class="mb-3">
-                      <label class="form-label" for="date_naissance">Date de naissance</label>
+                      <label class="form-label" for="date_naissance">{{ __('Date de naissance') }}</label>
                       <input type="date" class="form-control" id="date_naissance" name="date_naissance" value="{{ old('date_naissance') }}">
                     </div>
                     <div class="mb-3">
-                      <label class="form-label" for="adresse">Adresse</label>
+                      <label class="form-label" for="adresse">{{ __('Adresse') }}</label>
                       <input type="text" class="form-control" id="adresse" name="adresse" value="{{ old('adresse') }}">
                     </div>
                     <div class="mb-3">
-                      <label class="form-label" for="telephone">Numéro de téléphone</label>
+                      <label class="form-label" for="telephone">{{ __('Numéro de téléphone') }}</label>
                       <input type="tel" class="form-control" name="telephone" pattern="[0-9]*" inputmode="numeric" id="telephone" value="{{ old('telephone') }}">
                     </div>
                   </div>
 
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <label class="form-label" for="sexe">Sexe</label>
+                      <label class="form-label" for="sexe">{{ __('Sexe') }}</label>
                       <select class="form-control" id="sexe" name="sexe">
-                        <option value="">Sélectionnez le sexe</option>
-                        <option value="masculin">Masculin</option>
-                        <option value="feminin">Féminin</option>
+                        <option value="">{{ __('Sélectionnez le sexe') }}</option>
+                        <option value="masculin">{{ __('Masculin') }}</option>
+                        <option value="feminin">{{ __('Féminin') }}</option>
                       </select>
                     </div>
                     <div class="mb-3">
-                      <label class="form-label" for="email">Email</label>
+                      <label class="form-label" for="email">{{ __('E-mail') }}</label>
                       <input type="email" class="form-control" name="email" id="email" value="{{ old('email') }}">
                     </div>
                     <div class="mb-3">
-                      <label class="form-label" for="password">Password</label>
+                      <label class="form-label" for="password">{{ __('Mot de passe') }}</label>
                       <input type="password" class="form-control" name="password" id="password" autocomplete="new-password">
                     </div>
                     <div class="mb-3">
-                      <label class="form-label" for="password_confirmation">Confirmer Password</label>
+                      <label class="form-label" for="password_confirmation">{{ __('Confirmer le mot de passe') }}</label>
                       <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" autocomplete="new-password">
                     </div>
                     <input type="hidden" name="role" value="{{ $roleActif->code }}">
@@ -100,8 +100,8 @@
                 </div>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                  <button type="submit" class="btn btn-primary">Enregistrer</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Fermer') }}</button>
+                  <button type="submit" class="btn btn-primary">{{ __('Enregistrer') }}</button>
               </div>
             </form>
           </div>
@@ -112,13 +112,13 @@
         <table class="table table-striped table-hover">
           <thead class="bg-primary text-white sticky-top">
             <tr>
-              <th scope="col">Nom & Prénom</th>
-              <th scope="col">Date de naissance</th>
-              <th scope="col">Email</th>
-              <th scope="col">Sexe</th>
-              <th scope="col">N°-Telephone</th>
-              <th scope="col">Adresse</th>
-              <th scope="col">Action</th>
+              <th scope="col">{{ __('Nom et prénom') }}</th>
+              <th scope="col">{{ __('Date de naissance') }}</th>
+              <th scope="col">{{ __('E-mail') }}</th>
+              <th scope="col">{{ __('Sexe') }}</th>
+              <th scope="col">{{ __('Téléphone') }}</th>
+              <th scope="col">{{ __('Adresse') }}</th>
+              <th scope="col">{{ __('Action') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -127,7 +127,7 @@
               <td>{{ $resource->nom_prenom }}</td>
               <td>{{ $resource->date_naissance }}</td>
               <td>{{ $resource->email }}</td>
-              <td>{{ $resource->sexe }}</td>
+              <td>{{ in_array($resource->sexe, ['masculin', 'feminin']) ? __('messages.'.$resource->sexe) : $resource->sexe }}</td>
               <td>{{ $resource->telephone }}</td>
               <td>{{ $resource->adresse }}</td>
               <td>
@@ -141,7 +141,7 @@
       </div>
     </div>
     @else
-      <p>Aucun rôle du personnel n'est enregistré. Lancez « php artisan db:seed ».</p>
+      <p>{{ __('Aucun rôle du personnel n\'est enregistré. Lancez « php artisan db:seed ».') }}</p>
     @endif
   </div>
 </div>

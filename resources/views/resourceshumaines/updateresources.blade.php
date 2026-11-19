@@ -8,7 +8,7 @@
 <div class="container-fluid py-5">
 
   <div class="tabs">
-    <div class="tab-item active">modifier un utilisateur</div>
+    <div class="tab-item active">{{ __('Modifier un utilisateur') }}</div>
   </div>
   <div class="tab-content">
     <div class="tab-pane active">
@@ -26,52 +26,48 @@
                 <div class="row">
                     <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label" for="nom_prenom">Nom et prénom</label>
+                        <label class="form-label" for="nom_prenom">{{ __('Nom et prénom') }}</label>
                         <input type="text" class="form-control" id="nom_prenom" value="{{ $resources->nom_prenom }}" name="nom_prenom">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="date_naissance">Date de naissance</label>
+                        <label class="form-label" for="date_naissance">{{ __('Date de naissance') }}</label>
                         <input type="date" class="form-control" id="date_naissance" value="{{ $resources->date_naissance }}" name="date_naissance">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="adresse">Adresse</label>
+                        <label class="form-label" for="adresse">{{ __('Adresse') }}</label>
                         <input type="text" class="form-control" id="adresse" value="{{ $resources->adresse }}" name="adresse">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="telephone">Numéro de téléphone</label>
+                        <label class="form-label" for="telephone">{{ __('Numéro de téléphone') }}</label>
                         <input type="tel" class="form-control" value="{{ $resources->telephone }}" name="telephone" pattern="[0-9]*" inputmode="numeric" id="telephone">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="sexe">Sexe</label>
+                        <label class="form-label" for="sexe">{{ __('Sexe') }}</label>
                         <select class="form-control" id="sexe" name="sexe">
-                            <option value="{{ $resources->sexe }}">{{ $resources->sexe }}</option>
-                            @if ($resources->sexe == 'feminin')
-                            <option value="masculin">Masculin</option>
-                            @else
-                            <option value="feminin">Féminin</option>
-                            @endif
+                            <option value="masculin" @selected($resources->sexe === 'masculin')>{{ __('Masculin') }}</option>
+                            <option value="feminin" @selected($resources->sexe === 'feminin')>{{ __('Féminin') }}</option>
                         </select>
                     </div>
                     </div>
                 
                     <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label" for="email">Email</label>
+                        <label class="form-label" for="email">{{ __('E-mail') }}</label>
                         <input type="email" class="form-control" value="{{ $resources->email }}" name="email" id="email">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="password">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" placeholder="Laisser vide pour garder le mot de passe actuel" autocomplete="new-password">
+                        <label class="form-label" for="password">{{ __('Mot de passe') }}</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="{{ __('Laisser vide pour garder le mot de passe actuel') }}" autocomplete="new-password">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="password">Confirmer Password</label>
+                        <label class="form-label" for="password">{{ __('Confirmer le mot de passe') }}</label>
                         <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" autocomplete="new-password">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="role">Role</label>
+                        <label class="form-label" for="role">{{ __('Rôle') }}</label>
                         <select class="form-control" id="role" name="role">
                         @foreach($roles as $role)
-                            <option value="{{ $role->code }}" @selected($role->code === $resources->role)>{{ $role->libelle }}</option>
+                            <option value="{{ $role->code }}" @selected($role->code === $resources->role)>{{ __($role->libelle) }}</option>
                         @endforeach
                         </select>
                     </div>
@@ -80,12 +76,12 @@
                 </div>
                 <div class="modal-footer">
                     @if ($resources->estPatient())
-                        <a href="/listespatients" class="btn btn-secondary">Annuler</a>
+                        <a href="/listespatients" class="btn btn-secondary">{{ __('Annuler') }}</a>
                     @else
-                        <a href="/personnel/{{ $resources->role }}" class="btn btn-secondary">Annuler</a>
+                        <a href="/personnel/{{ $resources->role }}" class="btn btn-secondary">{{ __('Annuler') }}</a>
                     @endif
 
-                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <button type="submit" class="btn btn-primary">{{ __('Modifier') }}</button>
                 </div>
             </form>
         </div>

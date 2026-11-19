@@ -8,9 +8,10 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
     
     <title>@yield('title')</title>
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js"></script>
+    <!-- Bibliothèques livrées avec l'application (public/vendor) : fonctionnent sans Internet -->
+    <link href="{{ asset('vendor/fullcalendar/main.min.css') }}" rel="stylesheet" />
+    <script src="{{ asset('vendor/fullcalendar/main.min.js') }}"></script>
+    <script src="{{ asset('vendor/fullcalendar/locales-all.min.js') }}"></script>
 
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
@@ -20,10 +21,8 @@
     <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" />
 
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}" />
 
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('css/material-dashboard.css?v=3.1.0') }}" rel="stylesheet" />
@@ -40,7 +39,7 @@
             <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0" href="/">
             <img src="{{ asset('images/logo.jpg') }}" class="navbar-brand-img h-100" alt="main_logo"> 
-            <span class="ms-1 font-weight-bold text-white">{{ auth()->user()?->roleModel?->libelle ?? session('role') }}</span>
+            <span class="ms-1 font-weight-bold text-white">{{ __(auth()->user()?->roleModel?->libelle ?? session('role') ?? '') }}</span>
             </a>
         </div>
 
@@ -228,30 +227,11 @@
         @yield('content')
     </main>
     
-    <!-- <div class="fixed-plugin">
-        <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-            <i class="material-icons py-2">settings</i>
-        </a>
-        <div class="card shadow-lg">
-            <div class="card-header pb-0 pt-3">
-                <div class="float-start">
-                <h5 class="mt-3 mb-0">Material UI Configurator</h5>
-                <p>See our dashboard options.</p>
-                </div>
-                <div class="float-end mt-4">
-                <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
-                    <i class="material-icons">clear</i>
-                </button>
-                </div>
-                End Toggle Button
-            </div>
-        </div>
-    </div> -->
     <!-- Bootstrap 4 (fenêtres modales, onglets, menus déroulants) : jQuery doit être chargé en premier -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap/bootstrap.min.css') }}">
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/popper/popper.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/bootstrap.min.js') }}"></script>
 
     <!-- Scripts de l'application : recherche dans les tableaux, confirmation des suppressions -->
     <script src="{{ asset('js/script.js') }}"></script>

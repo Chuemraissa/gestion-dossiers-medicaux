@@ -18,7 +18,7 @@ class PosologiesController extends Controller
         $Posologie = Posologie::findOrFail($id);
         $Posologie->delete();
 
-        return redirect('/listeposologies')->with('status', 'L\'utilisateur a ete supprimé avec succes.');
+        return redirect('/listeposologies')->with('status', __('La posologie a été supprimée avec succès.'));
     }
 
 }

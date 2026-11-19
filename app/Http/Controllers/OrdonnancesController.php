@@ -72,7 +72,7 @@ class OrdonnancesController extends Controller
 
         $this->notifierPatient($request, new NewOrdonnanceMail());
 
-        return redirect('/listesordonnances')->with('status', 'L\'ordonnance a été ajoutée avec succès.');
+        return redirect('/listesordonnances')->with('status', __('L\'ordonnance a été ajoutée avec succès.'));
     }
 
     public function update_id_ordonnance($id)
@@ -146,7 +146,7 @@ class OrdonnancesController extends Controller
 
         $this->notifierPatient($request, new UpdateOrdonnanceMail());
 
-        return redirect('/listesordonnances')->with('status', 'L\'ordonnance a été modifiée avec succès.');
+        return redirect('/listesordonnances')->with('status', __('L\'ordonnance a été modifiée avec succès.'));
     }
 
     public function delete_id_ordonnance($id)
@@ -158,7 +158,7 @@ class OrdonnancesController extends Controller
         // La posologie n'appartient qu'à cette ordonnance : on la supprime aussi
         Posologie::whereKey($posologieId)->delete();
 
-        return redirect('/listesordonnances')->with('status', 'L\'ordonnance a été supprimée avec succès.');
+        return redirect('/listesordonnances')->with('status', __('L\'ordonnance a été supprimée avec succès.'));
     }
 
     /**

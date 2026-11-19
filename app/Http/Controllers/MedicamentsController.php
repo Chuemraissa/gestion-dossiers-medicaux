@@ -31,7 +31,7 @@ class MedicamentsController extends Controller
             $medicament->cout = $request->cout;
             $medicament->save();
     
-        return redirect('/listemedicaments');
+        return redirect('/listemedicaments')->with('status', __('Le médicament a été ajouté avec succès.'));
     }
     
     public function update_id_medicament($id)
@@ -57,7 +57,7 @@ class MedicamentsController extends Controller
         $medicament->cout = $request->cout;
         $medicament->update();  
 
-        return redirect('/listemedicaments');
+        return redirect('/listemedicaments')->with('status', __('Le médicament a été modifié avec succès.'));
         
     }
     
@@ -66,6 +66,6 @@ class MedicamentsController extends Controller
         $medicament = Medicament::findOrFail($id);
         $medicament->delete();
 
-        return redirect('/listemedicaments');
+        return redirect('/listemedicaments')->with('status', __('Le médicament a été supprimé avec succès.'));
     }
 }

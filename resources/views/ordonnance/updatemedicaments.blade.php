@@ -8,7 +8,7 @@
 <div class="container-fluid py-5">
 
   <div class="tabs">
-    <div class="tab-item active">modifier un categorie</div>
+    <div class="tab-item active">{{ __('Modifier une catégorie') }}</div>
   </div>
   <div class="tab-content">
     <div class="tab-pane active">
@@ -24,7 +24,7 @@
 
             <div class="modal-body">
                 <div class="mb-3">
-                    <label class="form-label" for="categorie">Categorie</label>
+                    <label class="form-label" for="categorie">{{ __('Catégorie') }}</label>
                     <select class="form-control" id="categorie" name="categorie">
                         <option value="{{ $medicaments->categorie->id }}">{{ $medicaments->categorie->nom }}</option>
                         @foreach($categories as $categorie)
@@ -35,21 +35,21 @@
                     </select>
                 </div>
                     <div class="mb-3">
-                        <label class="form-label" for="nom">Nom</label>
+                        <label class="form-label" for="nom">{{ __('Nom') }}</label>
                         <input type="text" class="form-control" value="{{ $medicaments->nom }}" name="nom" id="nom">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="quantite">Quantité</label>
+                        <label class="form-label" for="quantite">{{ __('Quantité') }}</label>
                         <input type="number" min="1" class="form-control" value="{{ $medicaments->quantite }}" name="quantite" id="quantite">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="cout">Coût</label>
+                        <label class="form-label" for="cout">{{ __('Coût') }}</label>
                         <input type="number" min="1" class="form-control" value="{{ $medicaments->cout }}" name="cout" id="quantite">
                     </div>
             </div>
                 <div class="modal-footer">
-                    <a href="/listemedicaments" class="btn btn-secondary">Annuler</a>
-                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <a href="/listemedicaments" class="btn btn-secondary">{{ __('Annuler') }}</a>
+                    <button type="submit" class="btn btn-primary">{{ __('Modifier') }}</button>
                 </div>
         </form>
         </div>

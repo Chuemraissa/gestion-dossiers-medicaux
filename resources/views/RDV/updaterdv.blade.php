@@ -8,7 +8,7 @@
 <div class="container-fluid py-5">
 
   <div class="tabs">
-    <div class="tab-item active">modifier un Rendez_vous</div>
+    <div class="tab-item active">{{ __('Modifier un rendez-vous') }}</div>
   </div>
   <div class="tab-content">
     <div class="tab-pane active">
@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label" for="patient">Patient</label>
+                        <label class="form-label" for="patient">{{ __('Patient') }}</label>
                         <select class="form-control" id="patient" name="patient">
                             @foreach($patients as $patient)
                                 @if($patient->id == $rdv->patient_id)
@@ -39,31 +39,31 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="date">Date</label>
+                        <label class="form-label" for="date">{{ __('Date') }}</label>
                         <input type="date" class="form-control" value="{{ $rdv->date }}" name="date">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label" for="heure">Heure</label>
+                        <label class="form-label" for="heure">{{ __('Heure') }}</label>
                         <input type="time" class="form-control" value="{{ $rdv->heure }}" name="heure">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="statut">Statut</label>
+                        <label class="form-label" for="statut">{{ __('Statut') }}</label>
                         <select name="statut" id="statut" class="form-control">
                             <x-options-liste liste="statuts_rdv" :selection="$rdv->statut" />
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="motif">Motif</label>
+                        <label class="form-label" for="motif">{{ __('Motif') }}</label>
                         <input type="text" class="form-control" value="{{ $rdv->motif }}" name="motif">
                     </div>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <a href="/listesRDV" class="btn btn-secondary">Annuler</a>
-            <button type="submit" class="btn btn-primary">Modifier</button>
+            <a href="/listesRDV" class="btn btn-secondary">{{ __('Annuler') }}</a>
+            <button type="submit" class="btn btn-primary">{{ __('Modifier') }}</button>
         </div>
         </form>
         </div>

@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             return back()->withErrors([
-                'email' => 'Les identifiants fournis sont incorrects.',
+                'email' => __('Les identifiants fournis sont incorrects.'),
             ])->onlyInput('email');
         }
 

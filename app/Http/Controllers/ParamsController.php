@@ -37,7 +37,7 @@ class ParamsController extends Controller
             $param->resource_id = $request->patient;
             $param->save();      
     
-        return redirect('/listeparams')->with('status', 'Le paramètre a été ajouté avec succès.');
+        return redirect('/listeparams')->with('status', __('Les paramètres ont été ajoutés avec succès.'));
     }
      
     public function update_id_param($id)
@@ -68,7 +68,7 @@ class ParamsController extends Controller
         $param->resource_id = $request->patient;
         $param->update();  
 
-        return redirect('/listeparams')->with('status', 'Le parametre a ete modifié avec succes.');
+        return redirect('/listeparams')->with('status', __('Les paramètres ont été modifiés avec succès.'));
         
     }
     
@@ -77,6 +77,6 @@ class ParamsController extends Controller
         $param = Param::findOrFail($id);
         $param->delete();
 
-        return redirect('/listeparams')->with('status', 'Le parametre a ete supprimé avec succes.');
+        return redirect('/listeparams')->with('status', __('Les paramètres ont été supprimés avec succès.'));
     }
 }

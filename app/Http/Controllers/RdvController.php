@@ -42,7 +42,7 @@ class RdvController extends Controller
             'start' => $rdv->date.'T'.substr($rdv->heure, 0, 5),
             'extendedProps' => [
                 'patient' => $patients[$rdv->patient_id] ?? '?',
-                'statut' => $rdv->statut,
+                'statut' => ElementListe::libelle('statuts_rdv', $rdv->statut),
                 'motif' => $rdv->motif,
             ],
         ])->values();
@@ -62,7 +62,7 @@ class RdvController extends Controller
 
         if ($this->heureDejaPrise($request->date, $request->heure)) {
             return redirect()->back()
-                ->withErrors(['heure' => 'Cette heure est déjà prise. Veuillez choisir une autre heure.'])
+                ->withErrors(['heure' => __('Cette heure est déjà prise. Veuillez choisir une autre heure.')])
                 ->withInput();
         }
 
@@ -84,7 +84,7 @@ class RdvController extends Controller
 
         $this->programmerRappels($patient, $medecin, $request);
 
-        return redirect('/listesRDV')->with('status', 'Le rendez-vous a été ajouté avec succès.');
+        return redirect('/listesRDV')->with('status', __('Le rendez-vous a été ajouté avec succès.'));
     }
 
     public function update_id_RDV($id)
@@ -110,7 +110,7 @@ class RdvController extends Controller
 
         if ($this->heureDejaPrise($request->date, $request->heure, $rdv->id)) {
             return redirect()->back()
-                ->withErrors(['heure' => 'Cette heure est déjà prise. Veuillez choisir une autre heure.'])
+                ->withErrors(['heure' => __('Cette heure est déjà prise. Veuillez choisir une autre heure.')])
                 ->withInput();
         }
 
@@ -126,7 +126,7 @@ class RdvController extends Controller
         $this->preparerDonneesMail($patient, $request);
         $this->envoyerMail($patient->email, new UpdateRendezVousMail());
 
-        return redirect('/listesRDV')->with('status', 'Le rendez-vous a été modifié avec succès.');
+        return redirect('/listesRDV')->with('status', __('Le rendez-vous a été modifié avec succès.'));
     }
 
     public function delete_id_RDV($id)
@@ -134,7 +134,7 @@ class RdvController extends Controller
         $rdv = Rendez_vous::findOrFail($id);
         $rdv->delete();
 
-        return redirect('/listesRDV')->with('status', 'Le rendez-vous a été supprimé avec succès.');
+        return redirect('/listesRDV')->with('status', __('Le rendez-vous a été supprimé avec succès.'));
     }
 
     private function heureDejaPrise(string $date, string $heure, ?int $saufId = null): bool

@@ -20,6 +20,15 @@
   .d-print-none, #print-btn, .annuler {
       display: none !important;
   }
+
+  /* À l'impression : seulement le document, sans le menu, la barre du haut ni les messages */
+  aside.sidenav, .navbar-main, .alert, .btn, .nav-tabs, input[type="search"] {
+      display: none !important;
+  }
+
+  .main-content {
+      margin-left: 0 !important;
+  }
 }
 
 .container {

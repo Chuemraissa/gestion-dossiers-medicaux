@@ -33,7 +33,7 @@ class TraitementController extends Controller
         $faire->resultat = $request->resultat;
         $faire->save();
 
-        return redirect('/listestraitements');
+        return redirect('/listestraitements')->with('status', __('Le résultat d\'examen a été ajouté avec succès.'));
     }
     
     public function update_id_traitement($id)
@@ -59,7 +59,7 @@ class TraitementController extends Controller
         $faire->resultat = $request->resultat;
         $faire->update();  
 
-        return redirect('/listestraitements');
+        return redirect('/listestraitements')->with('status', __('Le résultat d\'examen a été modifié avec succès.'));
         
     }
 
@@ -68,7 +68,7 @@ class TraitementController extends Controller
         $Faire = Faire::findOrFail($id);
         $Faire->delete();
 
-        return redirect('/listestraitements')->with('status', 'Le laborantin a ete supprimé avec succes.');
+        return redirect('/listestraitements')->with('status', __('Le résultat d\'examen a été supprimé avec succès.'));
     }
 
 }

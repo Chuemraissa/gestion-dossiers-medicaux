@@ -29,7 +29,7 @@ class ExamensController extends Controller
             $Examen->cout = $request->cout;
             $Examen->save();
     
-        return redirect('/listesexamens')->with('status', 'L\'utilisateur, les paramètres et les antécédents ont été ajoutés avec succès.');
+        return redirect('/listesexamens')->with('status', __('L\'examen a été ajouté avec succès.'));
     }
     
     public function update_id_examen($id)
@@ -52,7 +52,7 @@ class ExamensController extends Controller
             $Examen->cout = $request->cout;
             $Examen->update();  
 
-        return redirect('/listesexamens')->with('status', 'L\'utilisateur a ete modifié avec succes.');
+        return redirect('/listesexamens')->with('status', __('L\'examen a été modifié avec succès.'));
         
     }
     
@@ -61,6 +61,6 @@ class ExamensController extends Controller
         $examen = Examen::findOrFail($id);
         $examen->delete();
 
-        return redirect('/listesexamens')->with('status', 'L\'utilisateur a ete supprimé avec succes.');
+        return redirect('/listesexamens')->with('status', __('L\'examen a été supprimé avec succès.'));
     }
 }

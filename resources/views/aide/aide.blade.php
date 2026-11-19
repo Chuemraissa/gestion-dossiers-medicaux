@@ -7,7 +7,8 @@
       @section('content')
       <div class="container-fluid py-5">
       
-        <p>Si vous avez un quelconque problè, bien vouloir contacter le numero suivant: <h6>+237699060031</h6></p>
+        <p>{{ __('Pour tout problème, veuillez contacter le numéro suivant :') }}</p>
+        <h6>{{ \App\Models\Parametre::valeur('support_telephone') }}</h6>
       
       </div>
         @endsection

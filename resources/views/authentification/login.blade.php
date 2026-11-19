@@ -6,7 +6,7 @@
 
     <link href="{{ asset('css/login.css') }}" rel="stylesheet" />
     
-    <title>Connexion</title>
+    <title>{{ __('Connexion') }}</title>
   </head>
 
 <body>  

@@ -8,11 +8,9 @@
 <div class="container-fluid py-5 p-5">
     <header class="header">
         <div>
-            <h1>Electronical Folder</h1>
-            <p>Entrée de Bafoussam, BP 1234, <br>Région de l'Ouest, Cameroun</p>
-            <p>Tél : +237695236548</p>
+            @include('partials.entete-clinique')
         </div>
-        <img src="{{ asset('images/logo.jpg') }}" alt="Electronical Medical" class="header-logo">
+        <img src="{{ asset('images/logo.jpg') }}" alt="{{ \App\Models\Parametre::valeur('clinique_nom') }}" class="header-logo">
     </header>
 
     <h2 class="text-center">@lang('messages.listepatients')</h2>
@@ -35,7 +33,7 @@
                     <td>{{ $patient->nom_prenom }}</td>
                     <td>{{ $patient->date_naissance }}</td>
                     <td>{{ $patient->email }}</td>
-                    <td>{{ $patient->sexe }}</td>
+                    <td>{{ in_array($patient->sexe, ['masculin', 'feminin']) ? __('messages.'.$patient->sexe) : $patient->sexe }}</td>
                     <td>{{ $patient->telephone }}</td>
                     <td>{{ $patient->adresse }}</td>
                 </tr>

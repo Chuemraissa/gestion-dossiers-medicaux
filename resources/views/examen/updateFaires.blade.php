@@ -8,7 +8,7 @@
       <div class="container-fluid py-5">
       
         <div class="tabs">
-          <div class="tab-item active">modifier un traitement</div>
+          <div class="tab-item active">{{ __('Modifier un résultat d\'examen') }}</div>
         </div>
         <div class="tab-content">
           <div class="tab-pane active">
@@ -27,7 +27,7 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="mb-3">
-                              <label class="form-label" for="patient">NomPatient</label>
+                              <label class="form-label" for="patient">{{ __('Patient') }}</label>
                               <select class="form-control" id="patient" name="patient">
                                 @foreach($patients as $patient)
                                     @if($patient->id == $effectuers->patient_id)
@@ -39,7 +39,7 @@
                               </select>
                           </div>
                           <div class="mb-3">
-                              <label class="form-label" for="examen">TypeExamen</label>
+                              <label class="form-label" for="examen">{{ __('Type d\'examen') }}</label>
                               <select class="form-control" id="examen" name="type">
                               @foreach($examens as $examen)
                               @if($effectuers->examen_id == $examen->id)
@@ -54,15 +54,15 @@
                         </div>
                         <div class="col-md-6">
                           <div class="mb-3">
-                            <label class="form-label" for="resultat">Resultat</label>
+                            <label class="form-label" for="resultat">{{ __('Résultat') }}</label>
                             <input type="text" class="form-control" value="{{ $effectuers->resultat }}" id="resultat" name="resultat">
                           </div>
                         </div>
                       </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="/listestraitements" class="btn btn-secondary">Annuler</a>
-                        <button type="submit" class="btn btn-primary">Modifier</button>
+                        <a href="/listestraitements" class="btn btn-secondary">{{ __('Annuler') }}</a>
+                        <button type="submit" class="btn btn-primary">{{ __('Modifier') }}</button>
                     </div>
                         </form>
               </div>

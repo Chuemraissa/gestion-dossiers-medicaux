@@ -8,7 +8,7 @@
 <div class="container-fluid py-5">
 
   <div class="tabs">
-    <div class="tab-item active">modifier Antecedent</div>
+    <div class="tab-item active">{{ __('Modifier un antécédent') }}</div>
   </div>
   <div class="tab-content">
     <div class="tab-pane active">
@@ -25,7 +25,7 @@
               <div class="modal-body">
                 <div class="row">
                     <div class="mb-3">
-                        <label class="form-label" for="patient">Patient</label>
+                        <label class="form-label" for="patient">{{ __('Patient') }}</label>
                         <select class="form-control" id="patient" name="patient">
                             @foreach($resources as $resource)
                                 @if($resource->id == $antecedents->resource_id)
@@ -37,19 +37,19 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                      <label class="form-label" for="type">Type</label>
+                      <label class="form-label" for="type">{{ __('Type') }}</label>
                       <select class="form-control" name="type_antecedent" id="type">
                         <x-options-liste liste="types_antecedent" :selection="$antecedents->type" />
                       </select>
                     </div>
                     <div class="mb-3">
-                      <label class="form-label" for="description">Description</label>
+                      <label class="form-label" for="description">{{ __('Description') }}</label>
                       <textarea class="form-control" name="description_antecedent" id="description">{{ $antecedents->description }}</textarea>
                     </div>
                 </div>
               <div class="modal-footer">
-                    <a href="/listeantecedents" class="btn btn-secondary">Annuler</a>
-                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <a href="/listeantecedents" class="btn btn-secondary">{{ __('Annuler') }}</a>
+                    <button type="submit" class="btn btn-primary">{{ __('Modifier') }}</button>
               </div>
             </form>
         </div>

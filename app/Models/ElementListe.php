@@ -47,6 +47,9 @@ class ElementListe extends Model
      */
     public static function libelle(string $liste, ?string $valeur): ?string
     {
-        return self::options($liste)->firstWhere('valeur', $valeur)?->libelle ?? $valeur;
+        $libelle = self::options($liste)->firstWhere('valeur', $valeur)?->libelle;
+
+        // Le libellé est traduit s'il existe dans lang/*.json, sinon affiché tel quel
+        return $libelle !== null ? __($libelle) : $valeur;
     }
 }

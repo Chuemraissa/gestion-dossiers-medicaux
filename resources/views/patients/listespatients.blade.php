@@ -132,7 +132,7 @@
               <td>{{ $patient->nom_prenom }}</td>
               <td>{{ $patient->date_naissance }}</td>
               <td>{{ $patient->email }}</td>
-              <td>{{ $patient->sexe }}</td>
+              <td>{{ in_array($patient->sexe, ['masculin', 'feminin']) ? __('messages.'.$patient->sexe) : $patient->sexe }}</td>
               <td>{{ $patient->telephone }}</td>
               <td>{{ $patient->adresse }}</td>
               <td>
@@ -208,7 +208,7 @@
                   <!-- Colonne 1 : Ajout de patient -->
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <label class="form-label" for="gs">GS</label>
+                      <label class="form-label" for="gs">{{ __('Groupe sanguin') }}</label>
                       <select class="form-control" name="groupe_sanguin" id="gs">
                         <option value="">@lang('messages.selectgs')</option>
                         <x-options-liste liste="groupes_sanguins" :selection="old('groupe_sanguin')" />
